@@ -48,7 +48,7 @@ const CategoryTabs = ({ activeTab, setActiveTab }) => {
 
 
     return (
-        <div className="flex space-x-2 overflow-x-auto pb-2 -mb-2">
+        <div className="flex space-x-2 overflow-x-auto pb-2 -mb-2  no-scrollbar">
             {allCategories.map((category) => {
                 const isActive = activeTab === category;
                 const count = mockCounts[category] || 0;

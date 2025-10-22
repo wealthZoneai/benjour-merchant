@@ -83,13 +83,11 @@ const MenuManagement = () => {
         </button>
       </div>
     </div>
-
     <div className="flex flex-col p-3  rounded-lg shadow-md bg-gray-50 h-[calc(100vh-100px)]"> 
       <div className="bg-white rounded-lg shadow-md mb-2 border-b border-gray-200 p-4 flex-shrink-0 shadow-sm">
         <CategoryTabs activeTab={activeCategory} setActiveTab={setActiveCategory} />
       </div>
 
-      {/* Scrollable Cards */}
       <div className="bg-white flex-1 overflow-y-auto p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 no-scrollbar">
         {filteredItems.map((item) => (
           <MenuItemCard key={item.id} item={item} />

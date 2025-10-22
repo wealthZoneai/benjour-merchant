@@ -7,7 +7,7 @@ declare module "axios" {
 }
 
 const httpClient = axios.create({
-  baseURL: "https://hc-il-api-dev.ideyalabs.com/",
+  baseURL: "https://hc-il-api-dev.welthzone.com/",
   headers: {
     deviceType: "Web",
     "Content-Type": "application/json",
