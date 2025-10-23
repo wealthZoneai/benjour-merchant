@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { List, Menu, Truck, User, HelpCircle, Settings } from "lucide-react";
-// Import useLocation for URL-based active state
 import { Link, useLocation } from "react-router-dom";
 import dashbord from "../../assets/dashboard.svg";
 import dashbord_inactive from "../../assets/home_white_icon.svg";
 import Orders from "../../assets/Orders.svg";
 import Orders_Active from "../../assets/Order_active.svg";
-// import Menu from "../../assets/Menu.svg";
 import Menu_active from "../../assets/Menu_active.svg";
 import Feelt from "../../assets/Feelt.svg";
 import Feelt_active from "../../assets/Fleet_active.svg";
@@ -14,16 +12,13 @@ import Profile from "../../assets/Profile.svg";
 import Profile_active from "../../assets/Profile_active.svg";
 import Help from "../../assets/help.svg";
 import Help_active from "../../assets/Help_active.svg";
-// import Settings from "../../assets/Settings.svg";
 import Settings_active from "../../assets/Settings_active.svg";
 import renderImage from "../../utills/render-image";
 
 interface MenuItem {
   id: number;
   label: string;
-   icon: React.ReactNode;
-  // activeIcon: React.ReactNode;
-  // inactiveIcon: React.ReactNode;
+  icon: React.ReactNode;
   path: string;
 }
 
@@ -32,21 +27,6 @@ const Sidebar: React.FC = () => {
   const location = useLocation();
 
   const menuItems: MenuItem[] = [
-    // {
-    //   id: 1,
-    //   label: "Dashboard",
-    //   activeIcon: renderImage({
-    //     src: dashbord,
-    //     alt: "Dashboard Active Icon",
-    //     className: "w-5 h-5",
-    //   }),
-    //   inactiveIcon: renderImage({
-    //     src: dashbord_inactive,
-    //     alt: "Dashboard Inactive Icon",
-    //     className: "w-5 h-5",
-    //   }),
-    //   path: "/dashboard",
-    // },
     {
       id: 1,
       label: "Dashboard",
@@ -73,9 +53,11 @@ const Sidebar: React.FC = () => {
 
   return (
     <div className="w-64 h-screen bg-[#0099FF] text-white flex flex-col justify-between">
-      <div>
-        <div className="p-4 font-bold text-xl tracking-wide">LOGO</div>
-        <nav className="mt-4 flex-1">
+      <div className="p-4 font-bold text-xl tracking-wide shrink-0">LOGO</div>
+
+      {/* Scrollable Navigation Section */}
+      <div className="flex-1 overflow-y-auto no-scrollbar">
+        <nav className="mt-4 space-y-1">
           {menuItems.map((item) => {
             const isActive = activeItem === item.id;
             return (
@@ -97,8 +79,7 @@ const Sidebar: React.FC = () => {
                     ${isActive ? "text-[#0099FF] font-semibold" : "hover:bg-[#0088EE] text-white"}
                   `}
                 >
-                   {item.icon}
-                  {/* {isActive ? item.activeIcon : item.inactiveIcon} */}
+                  {item.icon}
                   <span className="text-sm font-Poppins">{item.label}</span>
                 </div>
               </Link>
@@ -107,7 +88,8 @@ const Sidebar: React.FC = () => {
         </nav>
       </div>
 
-      <div className="bg-[#0088EE] py-4 px-5 flex items-center gap-3">
+      {/* Bottom User Info (Fixed) */}
+      <div className="bg-[#0088EE] py-4 px-5 flex items-center gap-3 shrink-0">
         <div className="w-10 h-10 rounded-full bg-white text-[#0099FF] flex items-center justify-center font-bold">
           J
         </div>

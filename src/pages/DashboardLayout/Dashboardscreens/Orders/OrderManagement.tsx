@@ -4,11 +4,11 @@ import { useForm, FormProvider } from "react-hook-form";
 import OrderFilterTabs from './OrderFilterTabs';
 import { Calendar } from 'lucide-react';
 import OrderCard from './OrderCard';
-import DateRangeCalendar from '../../../../components/CustomCalendar/DateRangeCalendar';
+import DateRangePicker from '../../../../components/CustomCalendar/DateRangePicker';
 
 const allOrders = [
     {
-        id: '1234', time: '2:45', customer: 'Sarah Johnson', phone: '+1(555)123-456',
+        id: '1234', time: '12-02-2025 - 2:45', customer: 'Sarah Johnson', phone: '+1(555)123-456',
         address: '123 Main St,Downtown, City 12345', status: 'New',
         items: [
             { name: '2x Chicken Burger(No Onions)', price: 25.98 },
@@ -19,7 +19,7 @@ const allOrders = [
         actions: ['View Details', 'Start Preparing']
     },
     {
-        id: '1235', time: '2:30', customer: 'Mike Chen', phone: '+1(555)123-456',
+        id: '1235', time: '12-02-2025 - 2:30', customer: 'Mike Chen', phone: '+1(555)123-456',
         address: '123 Oak Ave,Uptown 12345', status: 'Preparing',
         items: [
             { name: '2x Pizza Margherita', price: 15.98 },
@@ -29,7 +29,7 @@ const allOrders = [
         actions: ['View Details', 'Start Preparing']
     },
     {
-        id: '1236', time: '2:45', customer: 'Sarah Johnson', phone: '+1(555)123-456',
+        id: '1236', time: '12-02-2025 - 2:45', customer: 'Sarah Johnson', phone: '+1(555)123-456',
         address: '123 Main St,Downtown, City 12345', status: 'Ready',
         items: [
             { name: '2x Chicken Burger(No Onions)', price: 25.98 },
@@ -40,7 +40,7 @@ const allOrders = [
         actions: ['View Details', 'Assign Order']
     },
     {
-        id: '1237', time: '2:45', customer: 'Sarah Johnson', phone: '+1(555)123-456',
+        id: '1237', time: '12-02-2025 - 2:45', customer: 'Sarah Johnson', phone: '+1(555)123-456',
         address: '123 Main St,Downtown, City 12345', status: 'New',
         items: [
             { name: '2x Chicken Burger(No Onions)', price: 25.98 },
@@ -51,7 +51,7 @@ const allOrders = [
         actions: ['View Details', 'Start Preparing']
     },
     {
-        id: '1238', time: '2:30', customer: 'Mike Chen', phone: '+1(555)123-456',
+        id: '1238', time: '12-02-2025 - 2:30', customer: 'Mike Chen', phone: '+1(555)123-456',
         address: '123 Oak Ave,Uptown 12345', status: 'Out Of Delivery',
         items: [
             { name: '2x Pizza Margherita', price: 15.98 },
@@ -61,7 +61,7 @@ const allOrders = [
         actions: ['View Details', 'Out Of Delivery']
     },
     {
-        id: '1239', time: '2:45', customer: 'Sarah Johnson', phone: '+1(555)123-456',
+        id: '1239', time: '12-02-2025 - 2:45', customer: 'Sarah Johnson', phone: '+1(555)123-456',
         address: '123 Main St,Downtown, City 12345', status: 'Assigned',
         items: [
             { name: '2x Chicken Burger(No Onions)', price: 25.98 },
@@ -76,7 +76,6 @@ const allOrders = [
 const OrderManagement = () => {
     const [activeTab, setActiveTab] = useState('All Orders');
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-    const methods = useForm();
 
     const toggleCalendar = () => setIsCalendarOpen(prev => !prev);
 
@@ -102,15 +101,8 @@ const OrderManagement = () => {
                         Refund={allOrders.filter(o => o.status === 'Refund').length}
                     />
                     <div className="absolute top-4 right-4 z-20">
-                        <button
-                            onClick={toggleCalendar}
-                            className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 transition-colors shadow-sm"
-                            aria-expanded={isCalendarOpen}
-                            aria-label="Filter orders by date range"
-                        >
-                            <Calendar className="w-6 h-6" />
-                        </button>
-                    </div>
+                            <DateRangePicker />
+                        </div>
                 </div>
 
                 <div className="bg-white flex-1 overflow-y-auto p-3 mb-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 no-scrollbar">
@@ -120,19 +112,7 @@ const OrderManagement = () => {
                 </div>
             </div>
 
-            {isCalendarOpen && (
-                <div
-                    className="fixed inset-0 z-50 flex items-start justify-end p-4 bg-black/20"
-                    onClick={() => setIsCalendarOpen(false)}
-                >
-                    <div
-                        className="bg-white rounded-xl shadow-2xl mt-14 transition-transform duration-200  transform scale-100 opacity-100"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <DateRangeCalendar />
-                    </div>
-                </div>
-            )}
+          
         </div>
     );
 

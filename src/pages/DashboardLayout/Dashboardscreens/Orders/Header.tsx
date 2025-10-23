@@ -13,7 +13,7 @@ const Header: React.FC = () => {
           <input
             type="text"
             placeholder="Search By Order ID, Customer Name..."
-            className="p-2 pl-10 border rounded-lg text-sm w-64 focus:ring-blue-500 focus:border-blue-500"
+            className="p-2 pl-10 border rounded-lg text-sm w-64 focus:border-none focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
         </div>

@@ -1,6 +1,6 @@
 // src/pages/MenuManagementPage.js (Final Context)
 import React, { useState } from 'react';
-import { Plus } from 'lucide-react';
+import { Plus, Search } from 'lucide-react';
 import MenuItemCard from './MenuItemCard'; // Corrected relative import path
 import CategoryTabs from './CategoryTabs'; // Corrected relative import path
 
@@ -74,6 +74,14 @@ const MenuManagement = () => {
         <p className="text-gray-600 mt-1">Manage Your Menu Items And Categories</p>
       </div>
       <div className="flex space-x-3">
+        <div className="relative hidden sm:block">
+          <input
+            type="text"
+            placeholder="Search By Order items"
+            className="p-2 pl-10 border rounded-lg text-sm w-64 focus:border-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+        </div>
         <button className="flex items-center px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
           + Add Category
         </button>

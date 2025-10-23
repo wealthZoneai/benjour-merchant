@@ -16,7 +16,7 @@ const FleetStatusTabs = ({ activeTab, setActiveTab }) => {
                     onClick={() => setActiveTab(tab.name)}
                     className={`px-4 py-2 text-sm font-semibold transition-colors rounded-lg 
                         ${tab.isPrimary && tab.active
-                            ? 'bg-blue-600 text-white shadow-md'
+                            ? 'bg-[#00B2FF] text-white shadow-md'
                             : tab.isPrimary
                                 ? 'text-blue-600 border border-blue-600 bg-white hover:bg-blue-50'
                                 : tab.active 
