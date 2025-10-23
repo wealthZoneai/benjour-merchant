@@ -1,10 +1,9 @@
-// src/components/OrderFilterTabs.js
 import React from 'react';
 
 const OrderFilterTabs = ({
     activeTab, setActiveTab,
     allOrdersCount, newOrdersCount, preparingOrdersCount,
-    readyOrdersCount, assignedOrdersCount, outOfDeliveryOrdersCount
+    readyOrdersCount, assignedOrdersCount, outOfDeliveryOrdersCount,Refund
 }) => {
     const tabs = [
         { name: `All Orders(${allOrdersCount})`, status: 'All Orders' },
@@ -13,6 +12,7 @@ const OrderFilterTabs = ({
         { name: `Ready(${readyOrdersCount})`, status: 'Ready' },
         { name: `Assigned(${assignedOrdersCount})`, status: 'Assigned' },
         { name: `Out Of Delivery(${outOfDeliveryOrdersCount})`, status: 'Out Of Delivery' },
+        { name: `Refund(${Refund})`, status: 'Refund' },
     ];
 
     return (

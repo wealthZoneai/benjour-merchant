@@ -1,9 +1,10 @@
-// src/pages/OrderManagement.js
 import React, { useState } from 'react';
-
 import Header from './Header';
+import { useForm, FormProvider } from "react-hook-form";
 import OrderFilterTabs from './OrderFilterTabs';
+import { Calendar } from 'lucide-react';
 import OrderCard from './OrderCard';
+import DateRangeCalendar from '../../../../components/CustomCalendar/DateRangeCalendar';
 
 const allOrders = [
     {
@@ -13,14 +14,8 @@ const allOrders = [
             { name: '2x Chicken Burger(No Onions)', price: 25.98 },
             { name: '1x French Fries', price: 4.99 },
             { name: '2x Coca Cola', price: 5.00 },
-            { name: '2x Chicken Burger(No Onions)', price: 25.98 },
-            { name: '1x French Fries', price: 4.99 },
-            { name: '2x Coca Cola', price: 5.00 },
-            { name: '2x Chicken Burger(No Onions)', price: 25.98 },
-            { name: '1x French Fries', price: 4.99 },
-            { name: '2x Coca Cola', price: 5.00 },
         ],
-        total: 35.97, // Corrected total based on items
+        total: 35.97,
         actions: ['View Details', 'Start Preparing']
     },
     {
@@ -80,15 +75,21 @@ const allOrders = [
 
 const OrderManagement = () => {
     const [activeTab, setActiveTab] = useState('All Orders');
+    const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+    const methods = useForm();
 
-    const filteredOrders = activeTab === 'All Orders'
-        ? allOrders
-        : allOrders.filter(order => order.status === activeTab.replace(/[^a-zA-Z]/g, ''));
+    const toggleCalendar = () => setIsCalendarOpen(prev => !prev);
+
+    const filteredOrders =
+        activeTab === 'All Orders'
+            ? allOrders
+            : allOrders.filter(order => order.status === activeTab.replace(/[^a-zA-Z]/g, ''));
+
     return (
         <div className="h-screen bg-gray-50 overflow-hidden">
-            <Header />
-            <div className="flex flex-col p-3  rounded-lg shadow-md bg-gray-50 h-[calc(100vh-100px)]">
-                <div className="bg-white rounded-lg shadow-md mb-2 border-b border-gray-200 p-4 flex-shrink-0 shadow-sm">
+                <Header />
+            <div className="flex flex-col p-3 rounded-lg shadow-md bg-gray-50 h-[calc(100vh-100px)]">
+                <div className="bg-white rounded-lg shadow-md mb-2 border-b border-gray-200 p-4 flex-shrink-0 shadow-sm relative overflow-visible">
                     <OrderFilterTabs
                         activeTab={activeTab}
                         setActiveTab={setActiveTab}
@@ -98,7 +99,18 @@ const OrderManagement = () => {
                         readyOrdersCount={allOrders.filter(o => o.status === 'Ready').length}
                         assignedOrdersCount={allOrders.filter(o => o.status === 'Assigned').length}
                         outOfDeliveryOrdersCount={allOrders.filter(o => o.status === 'Out Of Delivery').length}
+                        Refund={allOrders.filter(o => o.status === 'Refund').length}
                     />
+                    <div className="absolute top-4 right-4 z-20">
+                        <button
+                            onClick={toggleCalendar}
+                            className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 transition-colors shadow-sm"
+                            aria-expanded={isCalendarOpen}
+                            aria-label="Filter orders by date range"
+                        >
+                            <Calendar className="w-6 h-6" />
+                        </button>
+                    </div>
                 </div>
 
                 <div className="bg-white flex-1 overflow-y-auto p-3 mb-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 no-scrollbar">
@@ -107,6 +119,20 @@ const OrderManagement = () => {
                     ))}
                 </div>
             </div>
+
+            {isCalendarOpen && (
+                <div
+                    className="fixed inset-0 z-50 flex items-start justify-end p-4 bg-black/20"
+                    onClick={() => setIsCalendarOpen(false)}
+                >
+                    <div
+                        className="bg-white rounded-xl shadow-2xl mt-14 transition-transform duration-200  transform scale-100 opacity-100"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <DateRangeCalendar />
+                    </div>
+                </div>
+            )}
         </div>
     );
 

@@ -96,8 +96,7 @@ const OrderCard = ({ order }) => {
         getActionButtonDetails(order.status);
 
     return (
-        <div className="bg-[#F1F1F4] p-4 rounded-xl shadow-lg border relative flex flex-col">
-            {/* Badge */}
+        <div className="bg-[#F1F1F4] p-4  rounded-xl shadow-lg border relative flex flex-col">
             <div className="absolute top-4 right-4 z-10">{getStatusBadge(order.status)}</div>
 
             {/* Order Header */}
