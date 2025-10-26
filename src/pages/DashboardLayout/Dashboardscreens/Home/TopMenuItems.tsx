@@ -26,9 +26,9 @@ const TopMenuItems = () => {
             {/* Header (Fixed part) */}
             <div className="flex justify-between items-center mb-4">
                 <h3 className="text-xl font-semibold text-gray-800">Top Menu Items</h3>
-                <button className="px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+                {/* <button className="px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
                     View Menu
-                </button>
+                </button> */}
             </div>
             
             <div className="space-y-3 overflow-y-auto max-h-[300px] pr-2">

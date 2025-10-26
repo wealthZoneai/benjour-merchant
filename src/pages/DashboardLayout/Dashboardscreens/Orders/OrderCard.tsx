@@ -1,10 +1,16 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { User, Phone, MapPin, ChevronDown } from 'lucide-react';
+import ViewDetails from './ViewDetails';
 
-const OrderCard = ({ order }) => {
+
+interface OrderCardProps {
+    order: any;
+}
+const OrderCard = ({ order }: OrderCardProps) => {
     const listRef = useRef<HTMLDivElement | null>(null);
     const [isScrollable, setIsScrollable] = useState(false);
     const [isAtBottom, setIsAtBottom] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
         const listEl = listRef.current;
@@ -21,7 +27,7 @@ const OrderCard = ({ order }) => {
     }, []);
 
     // ===== Status Badge =====
-    const getStatusBadge = (status) => {
+    const getStatusBadge = (status:string) => {
         let bgColor, textColor, badgeText;
         switch (status) {
             case 'New':
@@ -59,7 +65,7 @@ const OrderCard = ({ order }) => {
     };
 
     // ===== Button Logic =====
-    const getActionButtonDetails = (status) => {
+    const getActionButtonDetails = (status: any) => {
         let primaryButtonText, primaryButtonClasses, secondaryButtonText, secondaryButtonClasses;
         secondaryButtonText = 'View Details';
         secondaryButtonClasses = 'bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200';
@@ -130,7 +136,7 @@ const OrderCard = ({ order }) => {
                 >
                     <p className="font-medium text-gray-800 mb-2">Items:</p>
                     <ul className="text-sm text-gray-700 space-y-1">
-                        {order.items.map((item, index) => (
+                        {order.items.map((item:any, index:number) => (
                             <li key={index} className="flex justify-between">
                                 <span>
                                     {item.quantity}x {item.name}
@@ -157,6 +163,7 @@ const OrderCard = ({ order }) => {
             <div className="flex justify-between items-center mt-6 space-x-3">
                 <button
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${secondaryButtonClasses}`}
+                    onClick={() => setIsModalOpen(true)}
                 >
                     {secondaryButtonText}
                 </button>
@@ -166,6 +173,11 @@ const OrderCard = ({ order }) => {
                     {primaryButtonText}
                 </button>
             </div>
+            <ViewDetails
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                initialData={order}
+            />
         </div>
     );
 };

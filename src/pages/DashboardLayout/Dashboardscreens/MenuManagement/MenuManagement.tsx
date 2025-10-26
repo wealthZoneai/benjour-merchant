@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Plus, Search } from 'lucide-react';
 import MenuItemCard from './MenuItemCard'; // Corrected relative import path
 import CategoryTabs from './CategoryTabs'; // Corrected relative import path
+import AddCategoryModal from './AddCategoryModal';
+import AddMenuItemModal from './Addmenuitem';
 
 // --- Mock Data ---
 const menuItems = [
@@ -60,6 +62,8 @@ const menuItems = [
 
 const MenuManagement = () => {
   const [activeCategory, setActiveCategory] = useState('All');
+   const [modalOpen, setModalOpen] = useState(false);
+   const [menuModalOpen, setMenumodalOpen] = useState(false);
 
   const filteredItems =
     activeCategory === 'All'
@@ -77,15 +81,15 @@ const MenuManagement = () => {
         <div className="relative hidden sm:block">
           <input
             type="text"
-            placeholder="Search By Order items"
+            placeholder="Search By Menu items"
             className="p-2 pl-10 border rounded-lg text-sm w-64 focus:border-none focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
         </div>
-        <button className="flex items-center px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
+        <button onClick={() => setModalOpen(true)} className="flex items-center px-4 py-2 text-sm text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-100 transition-colors">
           + Add Category
         </button>
-        <button className="flex items-center px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md">
+        <button onClick={() => setMenumodalOpen(true)} className="flex items-center px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md">
           <Plus className="w-4 h-4 mr-2" />
           Add Menu Item
         </button>
@@ -107,6 +111,14 @@ const MenuManagement = () => {
           </p>
         )}
       </div>
+       <AddCategoryModal
+        isOpen={modalOpen} 
+        onClose={() => setModalOpen(false)} 
+      />
+       <AddMenuItemModal
+        isOpen={menuModalOpen} 
+        onClose={() => setMenumodalOpen(false)} 
+      />
     </div>
   </div>
 );

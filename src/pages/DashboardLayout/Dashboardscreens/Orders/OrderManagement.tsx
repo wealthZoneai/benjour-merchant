@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import Header from './Header';
-import { useForm, FormProvider } from "react-hook-form";
 import OrderFilterTabs from './OrderFilterTabs';
-import { Calendar } from 'lucide-react';
 import OrderCard from './OrderCard';
 import DateRangePicker from '../../../../components/CustomCalendar/DateRangePicker';
 
@@ -14,6 +12,16 @@ const allOrders = [
             { name: '2x Chicken Burger(No Onions)', price: 25.98 },
             { name: '1x French Fries', price: 4.99 },
             { name: '2x Coca Cola', price: 5.00 },
+            { name: '2x Chicken Burger(No Onions)', price: 25.98 },
+            { name: '1x French Fries', price: 4.99 },
+            { name: '2x Coca Cola', price: 5.00 },
+            { name: '2x Chicken Burger(No Onions)', price: 25.98 },
+            { name: '1x French Fries', price: 4.99 },
+            { name: '2x Coca Cola', price: 5.00 },
+            { name: '2x Chicken Burger(No Onions)', price: 25.98 },
+            { name: '1x French Fries', price: 4.99 },
+            { name: '2x Coca Cola', price: 5.00 },
+           
         ],
         total: 35.97,
         actions: ['View Details', 'Start Preparing']
@@ -75,9 +83,6 @@ const allOrders = [
 
 const OrderManagement = () => {
     const [activeTab, setActiveTab] = useState('All Orders');
-    const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-
-    const toggleCalendar = () => setIsCalendarOpen(prev => !prev);
 
     const filteredOrders =
         activeTab === 'All Orders'
@@ -86,7 +91,7 @@ const OrderManagement = () => {
 
     return (
         <div className="h-screen bg-gray-50 overflow-hidden">
-                <Header />
+                <Header  orders={allOrders} />
             <div className="flex flex-col p-3 rounded-lg shadow-md bg-gray-50 h-[calc(100vh-100px)]">
                 <div className="bg-white rounded-lg shadow-md mb-2 border-b border-gray-200 p-4 flex-shrink-0 shadow-sm relative overflow-visible">
                     <OrderFilterTabs
@@ -107,12 +112,12 @@ const OrderManagement = () => {
 
                 <div className="bg-white flex-1 overflow-y-auto p-3 mb-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 no-scrollbar">
                     {filteredOrders.map((order, index) => (
-                        <OrderCard key={index} order={order} />
+                        <OrderCard key={index} order={order}/>
                     ))}
                 </div>
             </div>
 
-          
+
         </div>
     );
 
