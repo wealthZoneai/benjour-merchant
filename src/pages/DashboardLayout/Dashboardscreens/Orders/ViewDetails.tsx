@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { User, Phone, MapPin, ChevronDown, X } from "lucide-react";
+import { User, Phone, MapPin, X } from "lucide-react";
 
 interface ViewDetailsProps {
     isOpen: boolean;
@@ -7,42 +7,21 @@ interface ViewDetailsProps {
     initialData: any;
 }
 
-const getStatusBadge = (status: string) => {
-   let bgColor, textColor, badgeText;
-        switch (status) {
-            case 'New':
-                bgColor = 'bg-red-500';
-                textColor = 'text-white';
-                badgeText = 'New Order';
-                break;
-            case 'Preparing':
-                bgColor = 'bg-yellow-400';
-                textColor = 'text-gray-800';
-                badgeText = 'Preparing';
-                break;
-            case 'Ready':
-                bgColor = 'bg-blue-500';
-                textColor = 'text-white';
-                badgeText = 'Ready';
-                break;
-            case 'Assigned':
-                bgColor = 'bg-blue-500';
-                textColor = 'text-white';
-                badgeText = 'Assign Order';
-                break;
-            case 'Out Of Delivery':
-                return null;
-            default:
-                bgColor = 'bg-gray-200';
-                textColor = 'text-gray-800';
-                badgeText = status;
-        }
+  const getStatusBadge = (status: string) => {
+        const badgeMap: Record<string, { bg: string; text: string }> = {
+            'New': { bg: 'bg-red-500', text: 'New Order' },
+            'Preparing': { bg: 'bg-yellow-400', text: 'Preparing' },
+            'Ready': { bg: 'bg-blue-500', text: 'Ready' },
+            'Assigned': { bg: 'bg-purple-500', text: 'Assigned' },
+            'Out Of Delivery': { bg: 'bg-red-600', text: 'Out Of Delivery' },
+        };
+        const badge = badgeMap[status] || { bg: 'bg-gray-300', text: status };
         return (
-            <span className={`px-3 py-1 text-xs font-semibold rounded ${bgColor} ${textColor}`}>
-                {badgeText}
+            <span className={`px-3 py-1 rounded-full text-xs font-semibold shadow-md ${badge.bg} text-white animate-pulse`}>
+                {badge.text}
             </span>
         );
-};
+    };
 
 const ViewDetails: React.FC<ViewDetailsProps> = ({ isOpen, onClose, initialData }) => {
     const listRef = useRef<HTMLDivElement>(null);
@@ -66,63 +45,73 @@ const ViewDetails: React.FC<ViewDetailsProps> = ({ isOpen, onClose, initialData 
     if (!isOpen || !initialData) return null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-            <div className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 relative">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+            <div className="relative w-full max-w-md p-6 rounded-3xl bg-white shadow-2xl flex flex-col gap-5">
+                
+                {/* Close Button */}
                 <button
                     onClick={onClose}
-                    className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+                    className="absolute top-4 right-4 text-gray-600 hover:text-gray-800 transition-colors"
                 >
-                    <X size={20} />
+                    <X size={24} />
                 </button>
-                <div className="absolute top-3 right-11">
+
+                {/* Status Badge */}
+                <div className="absolute top-4 left-1/2 -translate-x-1/2">
                     {getStatusBadge(initialData.status)}
                 </div>
-                <div className="mb-4 mt-2">
-                    <h2 className="text-2xl font-semibold text-gray-800">
-                        #{initialData.id}
-                    </h2>
+
+                {/* Header */}
+                <div className="text-center mt-6">
+                    <h2 className="text-2xl font-bold text-gray-800">Order #{initialData.id}</h2>
                     <p className="text-sm text-gray-500">{initialData.time}</p>
                 </div>
 
-                <div className="space-y-2 text-gray-700 mb-4">
-                    <div className="flex items-center text-sm">
-                        <User className="w-4 h-4 mr-2 text-gray-500" />
-                        <span>{initialData.customer}</span>
-                    </div>
-                    <div className="flex items-center text-sm">
-                        <Phone className="w-4 h-4 mr-2 text-gray-500" />
-                        <span>{initialData.phone}</span>
-                    </div>
-                    <div className="flex items-start text-sm">
-                        <MapPin className="w-4 h-4 mr-2 mt-0.5 text-gray-500" />
-                        <span>{initialData.address}</span>
-                    </div>
+                {/* Customer Info */}
+                <div className="grid grid-cols-1 gap-2 md:grid-cols-3 text-gray-700 text-sm">
+                    {[
+                        { icon: User, label: initialData.customer },
+                        { icon: Phone, label: initialData.phone },
+                        { icon: MapPin, label: initialData.address },
+                    ].map((info, idx) => (
+                        <div
+                            key={idx}
+                            className="flex items-center gap-2 p-2 rounded-xl bg-gray-50 shadow-inner hover:shadow-lg transition-shadow"
+                        >
+                            <info.icon className="w-4 h-4 text-gray-600" />
+                            <span>{info.label}</span>
+                        </div>
+                    ))}
                 </div>
 
-                <div className="relative mb-4">
+                {/* Items List */}
+                <div className="relative flex-1">
                     <div
                         ref={listRef}
-                        className="overflow-y-auto no-scrollbar border rounded-lg p-3 bg-gray-50"
-                        style={{ maxHeight: "230px" }}
+                        className=" no-scrollbar overflow-y-auto max-h-48 p-4 rounded-2xl bg-gray-50 border border-gray-200 shadow-inner"
                     >
-                        <p className="font-medium text-gray-800 mb-2">Items:</p>
-                        <ul className="text-sm text-gray-700 space-y-1">
-                            {initialData.items?.map((item: any, index: number) => (
-                                <li key={index} className="flex justify-between">
-                                    <span>{item.name}</span>
+                        <p className="text-gray-800 font-semibold mb-2">Items Ordered</p>
+                        <ul className="space-y-2">
+                            {initialData.items?.map((item: any, idx: number) => (
+                                <li
+                                    key={idx}
+                                    className="flex justify-between px-3 py-2 rounded-lg bg-white shadow hover:shadow-md transition-shadow"
+                                >
+                                    <span>{item.quantity}x {item.name}</span>
                                     <span>₹{item.price.toFixed(2)}</span>
                                 </li>
                             ))}
                         </ul>
                     </div>
-
+                    {isScrollable && !isAtBottom && (
+                        <div className="absolute bottom-0 left-0 w-full h-8 bg-gradient-to-t from-white to-transparent pointer-events-none rounded-b-2xl"></div>
+                    )}
                 </div>
 
-                <div className="flex justify-between items-center border-t border-gray-200 pt-3">
-                    <p className="text-base font-semibold text-gray-800">Total:</p>
-                    <p className="text-lg font-bold text-gray-900">
-                        ₹{initialData.total?.toFixed(2)}
-                    </p>
+                {/* Total */}
+                <div className="flex justify-between items-center mt-2 p-3 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-bold text-lg shadow-md">
+                    <span>Total</span>
+                    <span>₹{initialData.total?.toFixed(2)}</span>
                 </div>
 
             </div>

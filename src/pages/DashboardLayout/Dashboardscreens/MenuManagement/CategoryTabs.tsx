@@ -1,74 +1,84 @@
-// src/components/CategoryTabs.js
-import React from 'react';
+import React from "react";
+import CountUp from "react-countup";
 
-const CategoryTabs = ({ activeTab, setActiveTab }) => {
-    // Determine unique categories from mock data (or a fixed list in a real app)
-    const allCategories = [
-  'All',
-  'Burger',
-  'Pizza',
-  'Beverages',
-  'Salads',
-  'Sandwiches',
-  'Snacks',
-  'Desserts',
-  'Wraps',
-  'Ice Creams',
-  'Fries',
-  'Soups',
-  'Breakfast',
-  'Main Course',
-  'Combos',
-  'Chinese',
-  'Indian',
-  'Italian',
+interface CategoryTabsProps {
+  activeTab: string;
+  setActiveTab: (tab: string) => void;
+  mockCounts?: Record<string, number>; // counts for each category
+}
+
+const categories = [
+  { name: "All", count: 18, image: "https://img.icons8.com/color/96/ingredients.png" },
+  { name: "Burger", count: 3, image: "https://img.icons8.com/color/96/hamburger.png" },
+  { name: "Pizza", count: 5, image: "https://img.icons8.com/color/96/pizza.png" },
+  { name: "Beverages", count: 8, image: "https://img.icons8.com/color/96/soda-bottle.png" },
+  { name: "Salads", count: 2, image: "https://img.icons8.com/color/96/salad.png" },
+  { name: "Desserts", count: 4, image: "https://img.icons8.com/color/96/ice-cream-sundae.png" },
+  { name: "Wraps", count: 1, image: "https://img.icons8.com/color/96/wrap.png" },
+  { name: "Fries", count: 3, image: "https://img.icons8.com/color/96/french-fries.png" },
+  { name: "Chinese", count: 6, image: "https://img.icons8.com/color/96/noodles.png" },
+  { name: "Indian", count: 5, image: "https://img.icons8.com/color/96/curry.png" },
+  { name: "Italian", count: 4, image: "https://img.icons8.com/color/96/spaghetti.png" },
+  { name: "Italian", count: 4, image: "https://img.icons8.com/color/96/spaghetti.png" },
+  { name: "Italian", count: 4, image: "https://img.icons8.com/color/96/spaghetti.png" },
+  { name: "Italian", count: 4, image: "https://img.icons8.com/color/96/spaghetti.png" },
+  { name: "Italian", count: 4, image: "https://img.icons8.com/color/96/spaghetti.png" },
 ];
 
-    // In a real app, you would dynamically count items for the badge. Using mock counts for visual
-    const mockCounts = {
-  'All': 18,
-  'Burger': 1,
-  'Pizza': 1,
-  'Beverages': 4,
-  'Salads': 2,
-  'Sandwiches': 1,
-  'Snacks': 2,
-  'Desserts': 3,
-  'Wraps': 1,
-  'Ice Creams': 2,
-  'Fries': 3,
-  'Soups': 1,
-  'Breakfast': 2,
-  'Main Course': 4,
-  'Combos': 2,
-  'Chinese': 3,
-  'Indian': 5,
-  'Italian': 2,
-};
+const CategoryTabs: React.FC<CategoryTabsProps> = ({
+  activeTab,
+  setActiveTab,
+  mockCounts,
+}) => {
+  return (
+    <div className="flex space-x-5 overflow-x-auto py-1 px-2 no-scrollbar">
+      {categories.map((cat) => {
+        const isActive = activeTab === cat.name;
+        const count = mockCounts?.[cat.name] ?? cat.count ?? 0; 
 
-
-    return (
-        <div className="flex space-x-2 overflow-x-auto pb-2 -mb-2  no-scrollbar">
-            {allCategories.map((category) => {
-                const isActive = activeTab === category;
-                const count = mockCounts[category] || 0;
-                
-                return (
-                    <button
-                        key={category}
-                        onClick={() => setActiveTab(category)}
-                        className={`flex-shrink-0 px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 
-                            ${isActive
-                                ? 'bg-blue-500 text-white shadow-md'
-                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                            }`}
-                    >
-                        {category} ({count})
-                    </button>
-                );
-            })}
-        </div>
-    );
+        return (
+          <div
+            key={cat.name}
+            onClick={() => setActiveTab(cat.name)}
+            className="flex flex-col items-center cursor-pointer group"
+          >
+            <div
+              className={`w-16 h-16 rounded-full border-2 flex items-center justify-center shadow-md transition-transform duration-300 ${
+                isActive
+                  ? "border-blue-500 scale-105 shadow-blue-300 bg-blue-50"
+                  : "border-gray-200 hover:scale-105 hover:shadow-lg"
+              }`}
+            >
+              <img
+                src={cat.image}
+                alt={cat.name}
+                className="w-10 h-10 object-contain"
+              />
+            </div>
+            <p
+              className={`text-xs mt-2 font-medium flex items-center space-x-1 ${
+                isActive
+                  ? "text-blue-600 font-semibold"
+                  : "text-gray-600 group-hover:text-gray-800"
+              }`}
+            >
+              <span>{cat.name}</span>
+              {/* <span className="text-[10px] text-gray-500 font-normal">
+                (
+                <CountUp
+                  start={0}
+                  end={count}
+                  duration={1.2}
+                  separator=","
+                />
+                )
+              </span> */}
+            </p>
+          </div>
+        );
+      })}
+    </div>
+  );
 };
 
 export default CategoryTabs;

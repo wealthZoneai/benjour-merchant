@@ -1,11 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { User, Phone, MapPin, ChevronDown } from 'lucide-react';
+import { User, Phone, MapPin } from 'lucide-react';
 import ViewDetails from './ViewDetails';
-
 
 interface OrderCardProps {
     order: any;
 }
+
 const OrderCard = ({ order }: OrderCardProps) => {
     const listRef = useRef<HTMLDivElement | null>(null);
     const [isScrollable, setIsScrollable] = useState(false);
@@ -20,165 +20,103 @@ const OrderCard = ({ order }: OrderCardProps) => {
                 setIsAtBottom(listEl.scrollTop + listEl.clientHeight >= listEl.scrollHeight - 5);
             };
             checkScroll();
-
             listEl.addEventListener("scroll", checkScroll);
             return () => listEl.removeEventListener("scroll", checkScroll);
         }
     }, []);
 
-    // ===== Status Badge =====
-    const getStatusBadge = (status:string) => {
-        let bgColor, textColor, badgeText;
-        switch (status) {
-            case 'New':
-                bgColor = 'bg-red-500';
-                textColor = 'text-white';
-                badgeText = 'New Order';
-                break;
-            case 'Preparing':
-                bgColor = 'bg-yellow-400';
-                textColor = 'text-gray-800';
-                badgeText = 'Preparing';
-                break;
-            case 'Ready':
-                bgColor = 'bg-blue-500';
-                textColor = 'text-white';
-                badgeText = 'Ready';
-                break;
-            case 'Assigned':
-                bgColor = 'bg-blue-500';
-                textColor = 'text-white';
-                badgeText = 'Assign Order';
-                break;
-            case 'Out Of Delivery':
-                return null;
-            default:
-                bgColor = 'bg-gray-200';
-                textColor = 'text-gray-800';
-                badgeText = status;
-        }
+    const getStatusBadge = (status: string) => {
+        const badgeMap: Record<string, { bg: string; text: string }> = {
+            'New': { bg: 'bg-green-500', text: 'New Order' },
+            'Preparing': { bg: 'bg-yellow-400', text: 'Preparing' },
+            'Ready': { bg: 'bg-blue-500', text: 'Ready' },
+            'Assigned': { bg: 'bg-purple-500', text: 'Assigned' },
+            'Out Of Delivery': { bg: 'bg-red-600', text: 'Out Of Delivery' },
+        };
+        const badge = badgeMap[status] || { bg: 'bg-gray-300', text: status };
         return (
-            <span className={`px-3 py-1 text-xs font-semibold rounded ${bgColor} ${textColor}`}>
-                {badgeText}
+            <span className={`px-3 py-1 rounded-full text-xs font-semibold shadow-md ${badge.bg} text-white animate-pulse`}>
+                {badge.text}
             </span>
         );
     };
 
-    // ===== Button Logic =====
-    const getActionButtonDetails = (status: any) => {
-        let primaryButtonText, primaryButtonClasses, secondaryButtonText, secondaryButtonClasses;
-        secondaryButtonText = 'View Details';
-        secondaryButtonClasses = 'bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200';
-
-        switch (status) {
-            case 'New':
-                primaryButtonText = 'Start Preparing';
-                primaryButtonClasses = 'bg-blue-600 text-white hover:bg-blue-700';
-                break;
-            case 'Preparing':
-                primaryButtonText = 'Start Preparing';
-                primaryButtonClasses = 'bg-purple-600 text-white hover:bg-purple-700';
-                break;
-            case 'Ready':
-                primaryButtonText = 'Assign Order';
-                primaryButtonClasses = 'bg-blue-600 text-white hover:bg-blue-700';
-                break;
-            case 'Assigned':
-                primaryButtonText = 'Delivery';
-                primaryButtonClasses = 'bg-blue-600 text-white hover:bg-blue-700';
-                break;
-            case 'Out Of Delivery':
-                primaryButtonText = 'Out Of Delivery';
-                primaryButtonClasses = 'bg-red-600 text-white hover:bg-red-700';
-                break;
-            default:
-                primaryButtonText = 'Action';
-                primaryButtonClasses = 'bg-gray-500 text-white hover:bg-gray-600';
-        }
-        return { primaryButtonText, primaryButtonClasses, secondaryButtonText, secondaryButtonClasses };
-    };
-
-    const { primaryButtonText, primaryButtonClasses, secondaryButtonText, secondaryButtonClasses } =
-        getActionButtonDetails(order.status);
-
     return (
-        <div className="bg-[#F1F1F4] p-4  rounded-xl shadow-lg border relative flex flex-col">
-            <div className="absolute top-4 right-4 z-10">{getStatusBadge(order.status)}</div>
+        <>
+            <div className="relative bg-gradient-to-tr  to-blue-50 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/30 p-6 flex flex-col justify-between h-full transition-transform hover:scale-[1.03] hover:shadow-3xl">
+                
+                {/* Status Badge */}
+                <div className="absolute top-4 right-4 z-10">{getStatusBadge(order.status)}</div>
 
-            {/* Order Header */}
-            <div className="mb-4 pt-2">
-                <h3 className="text-xl font-bold text-gray-800">#{order.id}</h3>
-                <p className="text-lg text-gray-600">{order.time}</p>
-            </div>
-
-            {/* Customer Info */}
-            <div className="space-y-2 text-gray-700 mb-4">
-                <div className="flex items-center text-sm">
-                    <User className="w-4 h-4 mr-2 text-gray-500" />
-                    <span>{order.customer}</span>
-                </div>
-                <div className="flex items-center text-sm">
-                    <Phone className="w-4 h-4 mr-2 text-gray-500" />
-                    <span>{order.phone}</span>
-                </div>
-                <div className="flex items-start text-sm">
-                    <MapPin className="w-4 h-4 mr-2 mt-0.5 text-gray-500" />
-                    <span>{order.address}</span>
-                </div>
-            </div>
-
-            {/* Items Ordered - Scrollable with Arrow */}
-            <div className="relative mb-4">
-                <div
-                    ref={listRef}
-                    className="flex-1 overflow-y-auto no-scrollbar p-3"
-                    style={{ maxHeight: '120px' }}
-                >
-                    <p className="font-medium text-gray-800 mb-2">Items:</p>
-                    <ul className="text-sm text-gray-700 space-y-1">
-                        {order.items.map((item:any, index:number) => (
-                            <li key={index} className="flex justify-between">
-                                <span>
-                                    {item.quantity}x {item.name}
-                                </span>
-                                <span>₹{item.price.toFixed(2)}</span>
-                            </li>
-                        ))}
-                    </ul>
+                {/* Header */}
+                <div className="mb-5">
+                    <h3 className="text-2xl font-bold text-gray-900">#{order.id}</h3>
+                    <p className="text-gray-500">{order.time}</p>
                 </div>
 
-                {isScrollable && !isAtBottom && (
-                    <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-gray-400 animate-bounce">
-                        <ChevronDown className="w-5 h-5" />
+                {/* Customer Info */}
+                <div className="flex flex-col space-y-3 mb-5">
+                    {[
+                        { icon: User, value: order.customer },
+                        { icon: Phone, value: order.phone },
+                        { icon: MapPin, value: order.address },
+                    ].map((info, idx) => (
+                        <div key={idx} className="flex items-center gap-3 bg-white/60 backdrop-blur-xl p-3 rounded-xl shadow-md hover:shadow-lg transition-all">
+                            <info.icon className="w-5 h-5 text-purple-500" />
+                            <span className="text-gray-900 font-medium">{info.value}</span>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Items List */}
+                <div className="relative mb-5 flex-1">
+                    <div
+                        ref={listRef}
+                        className="no-scrollbar overflow-y-auto max-h-36 p-4 rounded-2xl bg-white/50 backdrop-blur-xl shadow-inner"
+                    >
+                        <p className="font-semibold text-gray-900 mb-3 text-lg">Items:</p>
+                        <ul className="space-y-2 text-gray-800 text-sm">
+                            {order.items.map((item: any, idx: number) => (
+                                <li key={idx} className="flex justify-between px-2 py-1 rounded-xl hover:bg-purple-50/50 transition">
+                                    <span>{item.quantity}x {item.name}</span>
+                                    <span className="font-medium">₹{item.price.toFixed(2)}</span>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
-                )}
+                    {isScrollable && !isAtBottom && (
+                        <div className="absolute bottom-0 left-0 w-full h-8 bg-gradient-to-t from-white/70 to-transparent pointer-events-none rounded-b-xl"></div>
+                    )}
+                </div>
+
+                {/* Total */}
+                <div className="flex justify-between items-center font-bold text-gray-900 mb-5 text-lg">
+                    <span>Total:</span>
+                    <span className="text-xl">₹{order.total.toFixed(2)}</span>
+                </div>
+
+                {/* Buttons */}
+                <div className="flex gap-4 mt-auto">
+                    <button
+                        className="flex-1 py-3 rounded-2xl bg-gradient-to-r from-purple-400 to-pink-400 text-white font-semibold hover:scale-105 hover:shadow-xl transition-transform shadow-md"
+                        onClick={() => setIsModalOpen(true)}
+                    >
+                        View Details
+                    </button>
+                    <button
+                        className="flex-1 py-3 rounded-2xl bg-gradient-to-r from-blue-400 to-blue-600 text-white font-semibold hover:scale-105 hover:shadow-xl transition-transform shadow-md"
+                    >
+                        {order.status === 'New' ? 'Start Preparing' : 'Action'}
+                    </button>
+                </div>
             </div>
 
-            <div className="flex justify-between items-center border-t border-gray-200 pt-4 mt-auto">
-                <p className="text-base font-semibold text-gray-800">Total:</p>
-                <p className="text-lg font-bold text-gray-900">₹{order.total.toFixed(2)}</p>
-            </div>
-
-            {/* Buttons */}
-            <div className="flex justify-between items-center mt-6 space-x-3">
-                <button
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${secondaryButtonClasses}`}
-                    onClick={() => setIsModalOpen(true)}
-                >
-                    {secondaryButtonText}
-                </button>
-                <button
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${primaryButtonClasses}`}
-                >
-                    {primaryButtonText}
-                </button>
-            </div>
             <ViewDetails
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 initialData={order}
             />
-        </div>
+        </>
     );
 };
 

@@ -6,12 +6,12 @@ interface EditProfileModalProps {
     onClose: () => void;
     onSave: (data: any) => void;
     initialData: {
-        fullName: string,
-        phoneNumber: string,
-        emailId: string,
-        location: string,
-        role: string,
-        lastLogin: string,
+        fullName: string;
+        phoneNumber: string;
+        emailId: string;
+        location: string;
+        role: string;
+        lastLogin: string;
     };
 }
 
@@ -34,109 +34,108 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({ isOpen, onClose, on
         onSave(formData);
     };
 
+    const inputClass = "pl-12 pr-4 py-3 w-full border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm transition";
+
     return (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
-                <h3 className="text-xl font-semibold text-gray-800 mb-6">Edit Profile</h3>
-                <form onSubmit={handleSubmit}>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 animate-slide-in">
+                
+                {/* Modal Header */}
+                <div className="mb-6 text-center">
+                    <h3 className="text-2xl font-bold text-gray-800 mb-2">Edit Profile</h3>
+                    <p className="text-sm text-gray-500">Update your profile information</p>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
                     {/* Full Name */}
-                    <div className="mb-4">
-                        <label htmlFor="fullName" className="sr-only">Full Name</label>
-                        <div className="relative">
-                            <User size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                            <input
-                                type="text"
-                                id="fullName"
-                                name="fullName"
-                                value={formData.fullName}
-                                onChange={handleChange}
-                                placeholder="Full Name"
-                                className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
+                    <div className="relative">
+                        <div className="absolute left-3 top-1/2 -translate-y-1/2 bg-blue-100 p-2 rounded-full">
+                            <User className="w-5 h-5 text-blue-600" />
                         </div>
+                        <input
+                            type="text"
+                            name="fullName"
+                            value={formData.fullName}
+                            onChange={handleChange}
+                            placeholder="Full Name"
+                            className={inputClass}
+                        />
                     </div>
 
                     {/* Phone Number */}
-                    <div className="mb-4">
-                        <label htmlFor="phone" className="sr-only">Phone Number</label>
-                        <div className="relative">
-                            <Phone size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                            <input
-                                type="text"
-                                id="phoneNumber"
-                                name="phoneNumber"
-                                value={formData.phoneNumber}
-                                onChange={handleChange}
-                                placeholder="Phone Number"
-                                className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
+                    <div className="relative">
+                        <div className="absolute left-3 top-1/2 -translate-y-1/2 bg-green-100 p-2 rounded-full">
+                            <Phone className="w-5 h-5 text-green-600" />
                         </div>
+                        <input
+                            type="text"
+                            name="phoneNumber"
+                            value={formData.phoneNumber}
+                            onChange={handleChange}
+                            placeholder="Phone Number"
+                            className={inputClass}
+                        />
                     </div>
 
-                    {/* Email ID */}
-                    <div className="mb-4">
-                        <label htmlFor="email" className="sr-only">Email ID</label>
-                        <div className="relative">
-                            <Mail size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                            <input
-                                type="email"
-                                id="emailId"
-                                name="emailId"
-                                value={formData.emailId}
-                                onChange={handleChange}
-                                placeholder="Email ID"
-                                className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
+                    {/* Email */}
+                    <div className="relative">
+                        <div className="absolute left-3 top-1/2 -translate-y-1/2 bg-yellow-100 p-2 rounded-full">
+                            <Mail className="w-5 h-5 text-yellow-600" />
                         </div>
+                        <input
+                            type="email"
+                            name="emailId"
+                            value={formData.emailId}
+                            onChange={handleChange}
+                            placeholder="Email ID"
+                            className={inputClass}
+                        />
                     </div>
 
-                    {/* Restaurant Name */}
-                    <div className="mb-4">
-                        <label htmlFor="restaurantName" className="sr-only">Restaurant Name</label>
-                        <div className="relative">
-                            <Building2 size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                            <input
-                                type="text"
-                                id="role"
-                                name="role"
-                                value={formData.role}
-                                onChange={handleChange}
-                                placeholder="Restaurant Name"
-                                className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
+                    {/* Restaurant / Role */}
+                    <div className="relative">
+                        <div className="absolute left-3 top-1/2 -translate-y-1/2 bg-purple-100 p-2 rounded-full">
+                            <Building2 className="w-5 h-5 text-purple-600" />
                         </div>
+                        <input
+                            type="text"
+                            name="role"
+                            value={formData.role}
+                            onChange={handleChange}
+                            placeholder="Restaurant Name"
+                            className={inputClass}
+                        />
                     </div>
 
                     {/* Location */}
-                    <div className="mb-6">
-                        <label htmlFor="location" className="sr-only">Location</label>
-                        <div className="relative">
-                            <MapPin size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                            <input
-                                type="text"
-                                id="location"
-                                name="location"
-                                value={formData.location}
-                                onChange={handleChange}
-                                placeholder="Location"
-                                className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
+                    <div className="relative">
+                        <div className="absolute left-3 top-1/2 -translate-y-1/2 bg-pink-100 p-2 rounded-full">
+                            <MapPin className="w-5 h-5 text-pink-600" />
                         </div>
+                        <input
+                            type="text"
+                            name="location"
+                            value={formData.location}
+                            onChange={handleChange}
+                            placeholder="Location"
+                            className={inputClass}
+                        />
                     </div>
 
-                    <div className="flex justify-center gap-3">
+                    {/* Buttons */}
+                    <div className="flex flex-col sm:flex-row gap-3 mt-4">
                         <button
                             type="submit"
-                            className="px-6 py-3 w-[200px] bg-[#0099FF] text-white rounded-lg hover:bg-blue-600 transition-colors duration-200 font-medium"
+                            className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg font-medium shadow-lg hover:shadow-xl transition transform hover:scale-105"
                         >
-                            SAVE
+                            Save
                         </button>
-                         <button
+                        <button
                             type="button"
                             onClick={onClose}
-                            className="px-6 py-2 w-[200px] bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors duration-200 font-medium"
+                            className="flex-1 px-6 py-3 bg-gray-200 text-gray-800 rounded-lg font-medium hover:bg-gray-300 transition"
                         >
-                            CANCEL
+                            Cancel
                         </button>
                     </div>
                 </form>

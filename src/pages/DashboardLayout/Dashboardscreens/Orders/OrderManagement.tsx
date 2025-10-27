@@ -87,40 +87,59 @@ const OrderManagement = () => {
     const filteredOrders =
         activeTab === 'All Orders'
             ? allOrders
-            : allOrders.filter(order => order.status === activeTab.replace(/[^a-zA-Z]/g, ''));
+            : allOrders.filter(
+                  (order) =>
+                      order.status.toLowerCase() ===
+                      activeTab.replace(/[^a-zA-Z]/g, '').toLowerCase()
+              );
 
     return (
-        <div className="h-screen bg-gray-50 overflow-hidden">
-                <Header  orders={allOrders} />
-            <div className="flex flex-col p-3 rounded-lg shadow-md bg-gray-50 h-[calc(100vh-100px)]">
-                <div className="bg-white rounded-lg shadow-md mb-2 border-b border-gray-200 p-4 flex-shrink-0 shadow-sm relative overflow-visible">
-                    <OrderFilterTabs
-                        activeTab={activeTab}
-                        setActiveTab={setActiveTab}
-                        allOrdersCount={allOrders.length}
-                        newOrdersCount={allOrders.filter(o => o.status === 'New').length}
-                        preparingOrdersCount={allOrders.filter(o => o.status === 'Preparing').length}
-                        readyOrdersCount={allOrders.filter(o => o.status === 'Ready').length}
-                        assignedOrdersCount={allOrders.filter(o => o.status === 'Assigned').length}
-                        outOfDeliveryOrdersCount={allOrders.filter(o => o.status === 'Out Of Delivery').length}
-                        Refund={allOrders.filter(o => o.status === 'Refund').length}
-                    />
-                    <div className="absolute top-4 right-4 z-20">
-                            <DateRangePicker />
-                        </div>
+        <div className="h-screen bg-gray-50 flex flex-col">
+            {/* Header */}
+            <Header orders={allOrders} />
+
+            {/* Main Content */}
+            <div className="flex-1 flex flex-col p-3 overflow-hidden">
+                {/* Tabs + Date Picker */}
+                <div className="bg-white rounded-lg shadow-md border-b border-gray-200 p-2 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+                    {/* Tabs */}
+                    <div className="flex-1 w-full">
+                        <OrderFilterTabs
+                            activeTab={activeTab}
+                            setActiveTab={setActiveTab}
+                            allOrdersCount={allOrders.length}
+                            newOrdersCount={allOrders.filter((o) => o.status === 'New').length}
+                            preparingOrdersCount={allOrders.filter((o) => o.status === 'Preparing').length}
+                            readyOrdersCount={allOrders.filter((o) => o.status === 'Ready').length}
+                            assignedOrdersCount={allOrders.filter((o) => o.status === 'Assigned').length}
+                            outOfDeliveryOrdersCount={allOrders.filter((o) => o.status === 'Out Of Delivery').length}
+                            Refund={allOrders.filter((o) => o.status === 'Refund').length}
+                        />
+                    </div>
+
+                    {/* Date Picker */}
+                    <div className="w-full md:w-auto self-start md:self-auto">
+                        <DateRangePicker />
+                    </div>
                 </div>
 
-                <div className="bg-white flex-1 overflow-y-auto p-3 mb-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 no-scrollbar">
-                    {filteredOrders.map((order, index) => (
-                        <OrderCard key={index} order={order}/>
-                    ))}
+                {/* Orders Grid */}
+                <div className="flex-1 overflow-y-auto mt-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {filteredOrders.map((order) => (
+                            <OrderCard key={order.id} order={order} />
+                        ))}
+
+                        {filteredOrders.length === 0 && (
+                            <p className="text-gray-500 col-span-full text-center py-10">
+                                No orders found for <strong>{activeTab}</strong>
+                            </p>
+                        )}
+                    </div>
                 </div>
             </div>
-
-
         </div>
     );
-
 };
 
 export default OrderManagement;

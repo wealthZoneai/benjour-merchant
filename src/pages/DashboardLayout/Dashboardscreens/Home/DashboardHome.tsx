@@ -18,23 +18,24 @@ const DashboardHome = () => {
     return (
         <>
             <Header />
-            <div className="min-h-screen bg-gray-50 md:p-5">
-                <div className="grid grid-cols-12 gap-6 mb-5">
-                    <div className="bg-white p-5 rounded-xl shadow-md flex flex-col justify-center items-start col-span-12 lg:col-span-6 space-y-6 relative">
-                        {/* Top Bar (Date Button) */}
-                        <div className="flex  w-full justify-end">
+
+            <div className="min-h-screen bg-gray-50 p-3 md:p-5 flex flex-col gap-5">
+                {/* Top Section: Stats + Earnings */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                    {/* Stats + Date Picker */}
+                    <div className="bg-white p-5 rounded-xl shadow-md flex flex-col gap-5">
+                        <div className="flex justify-end">
                             <DateRangePicker />
                         </div>
-
-                        {/* StatCards Section (2 columns, full width) */}
-                        <div className="grid grid-cols-2 gap-6 w-full">
+                        <div className="grid grid-cols-2 sm:grid-cols-2 gap-4">
                             {dashboardStats.map((stat, index) => (
                                 <StatCard key={index} {...stat} />
                             ))}
                         </div>
                     </div>
 
-                    <div className="col-span-14 lg:col-span-6 bg-white p-5 rounded-xl shadow-md h-full">
+                    {/* Earnings Chart */}
+                    <div className="bg-white p-5 rounded-xl shadow-md flex flex-col">
                         <h3 className="text-xl font-semibold text-gray-800 mb-4">Earnings</h3>
                         <EarningsChart />
                     </div>
@@ -49,14 +50,14 @@ const DashboardHome = () => {
 
                     <div className="col-span-12 lg:col-span-5 space-y-6">
                         <TopMenuItems />
-                    </div>
+                </div>
 
                     {/* Overall User Activity (Line Chart) - Spans 8 columns (below Sales Dynamics) */}
                     <div className="col-span-12 lg:col-span-8 bg-white p-6 rounded-xl shadow-md ">
-                        <UserActivityChart />
+                    <UserActivityChart />
+                    </div>
                     </div>
                 </div>
-            </div>
         </>
     );
 };
