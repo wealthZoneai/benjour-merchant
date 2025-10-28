@@ -10,7 +10,7 @@ import DateRangePicker from '../../../../components/CustomCalendar/DateRangePick
 const dashboardStats = [
     { title: 'Orders', value: '52', iconName: 'Orders' },
     { title: 'Approved', value: '55', iconName: 'Approved' },
-    { title: 'Monthly total', value: '55555', iconName: 'Monthly total' },
+    { title: 'Total', value: '55555', iconName: 'Monthly total' },
     { title: 'Revenue', value: '4546', iconName: 'Revenue' },
 ];
 

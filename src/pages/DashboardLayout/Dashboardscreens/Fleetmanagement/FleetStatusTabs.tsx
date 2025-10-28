@@ -7,7 +7,7 @@ const tabs = [
     { name: 'Offline(1)', active: false },
 ];
 
-const FleetStatusTabs = ({ activeTab, setActiveTab }) => {
+const FleetStatusTabs = ({ activeTab, setActiveTab }:any) => {
     return (
         <div className="flex items-center space-x-2 border-b border-gray-300 pb-2 mb-6">
             {tabs.map((tab, index) => (

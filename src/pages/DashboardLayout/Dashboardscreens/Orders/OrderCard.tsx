@@ -43,7 +43,7 @@ const OrderCard = ({ order }: OrderCardProps) => {
 
     return (
         <>
-            <div className="relative bg-gradient-to-tr  to-blue-50 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/30 p-6 flex flex-col justify-between h-full transition-transform hover:scale-[1.03] hover:shadow-3xl">
+            <div className="relative bg-gradient-to-tr p-6 to-blue-50 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/30 p-6 flex flex-col justify-between h-full transition-transform hover:scale-[1.03] hover:shadow-3xl">
                 
                 {/* Status Badge */}
                 <div className="absolute top-4 right-4 z-10">{getStatusBadge(order.status)}</div>

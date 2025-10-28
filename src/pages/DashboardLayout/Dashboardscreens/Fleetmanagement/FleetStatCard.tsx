@@ -4,7 +4,7 @@ import { Truck, CheckCircle, Clock, MapPin } from 'lucide-react';
 
 const icons = { Truck, CheckCircle, Clock, MapPin };
 
-const FleetStatCard = ({ title, value, change, changeColor, iconName }) => {
+const FleetStatCard = ({ title, value, change, changeColor, iconName }:any) => {
     const Icon = icons[iconName] || Clock;
 
     return (

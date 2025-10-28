@@ -2,7 +2,7 @@ import React from 'react';
 
 const tabs = ['Order Management', 'Batch Management', 'Delivery Slots'];
 
-const FleetContextTabs = ({ activeTab, setActiveTab }) => {
+const FleetContextTabs = ({ activeTab, setActiveTab }:any) => {
     return (
         <div className="flex items-center space-x-4 mb-6">
             {tabs.map((tab) => (
