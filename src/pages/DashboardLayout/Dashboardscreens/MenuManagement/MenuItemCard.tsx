@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { Clock, Edit, Trash2 } from "lucide-react";
 
 const MenuItemCard = ({ item, itemCount }:any) => {
+  console.log("Rendering MenuItemCard for item:", item);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
 
-  const isAvailable = item.status === "Available";
+  const isAvailable = item.itemAvailable === true;
   const badgeColor = isAvailable
     ? "bg-green-500/90 text-white"
     : "bg-red-500/90 text-white";
@@ -28,8 +29,8 @@ const MenuItemCard = ({ item, itemCount }:any) => {
         {/* Image */}
         {!imageError ? (
           <img
-            src={item.image}
-            alt={item.name}
+            src={item.itemImageUrl}
+            alt={item.itemName}
             className={`w-full h-full object-cover transition-opacity duration-500 ${
               imageLoaded ? "opacity-100" : "opacity-0"
             }`}
@@ -61,15 +62,15 @@ const MenuItemCard = ({ item, itemCount }:any) => {
       {/* Scrollable Content */}
       <div className="flex-1 overflow-y-auto no-scrollbar p-4">
         <div className="flex justify-between items-start">
-          <h3 className="text-lg font-bold text-gray-900">{item.name}</h3>
-          {item.price && (
+          <h3 className="text-lg font-bold text-gray-900">{item.itemName}</h3>
+          {/* {item.itemPrice && (
             <span className="text-lg font-semibold text-blue-600">
-              ₹{item.price.toFixed(2)}
+              ₹{item.itemPrice.toFixed(2)}
             </span>
-          )}
+          )} */}
         </div>
 
-        <p className="text-sm text-gray-500 mt-1 mb-3">{item.description}</p>
+        <p className="text-sm text-gray-500 mt-1 mb-3">{item.itemDescription}</p>
 
         <div className="flex items-center justify-between text-sm text-gray-600 mb-3">
           <div className="flex items-center">
@@ -82,7 +83,7 @@ const MenuItemCard = ({ item, itemCount }:any) => {
         <div>
           <p className="font-semibold text-gray-800 mb-2">Ingredients</p>
           <div className="flex flex-wrap gap-2">
-            {item.ingredients.slice(0, 3).map((ing :any, index:any) => (
+            {/* {item.ingredients.slice(0, 3).map((ing :any, index:any) => (
               <span
                 key={index}
                 className="px-3 py-1 text-xs rounded-full bg-blue-50 text-blue-700 border border-blue-200"
@@ -94,7 +95,7 @@ const MenuItemCard = ({ item, itemCount }:any) => {
               <span className="px-3 py-1 text-xs rounded-full bg-blue-100 text-blue-600 font-semibold">
                 +{item.ingredients.length - 3} More
               </span>
-            )}
+            )} */}
           </div>
         </div>
       </div>

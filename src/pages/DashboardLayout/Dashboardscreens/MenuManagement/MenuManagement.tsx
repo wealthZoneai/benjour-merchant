@@ -1,10 +1,11 @@
-// src/pages/MenuManagementPage.js
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Plus, Search } from 'lucide-react';
 import MenuItemCard from './MenuItemCard';
 import CategoryTabs from './CategoryTabs';
 import AddCategoryModal from './AddCategoryModal';
 import AddMenuItemModal from './Addmenuitem';
+import { AllCategory } from '../../../../services/apiHelpers';
+import { toast } from 'react-toastify';
 
 // --- Mock Data ---
 const menuItems = [
@@ -60,15 +61,45 @@ const menuItems = [
   },
 ];
 
+interface MenuItem {
+  id: string;
+  name: string;
+  price?: number;
+  image?: string;
+}
+
+interface Category {
+  menuId: string;
+  menuName: string;
+  menuItemList?: MenuItem[];
+}
+
 const MenuManagement = () => {
   const [activeCategory, setActiveCategory] = useState('All');
   const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
   const [isMenuModalOpen, setMenuModalOpen] = useState(false);
+  const [categories, setCategories] = useState<Category[]>([]);
 
-  const filteredItems =
-    activeCategory === 'All'
-      ? menuItems
-      : menuItems.filter((item) => item.category === activeCategory);
+ // ✅ Fetch categories
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await AllCategory();
+        if (response?.data) {
+          setCategories(response.data);
+          console.log("Fetched Categories:", response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  const filteredItems: MenuItem[] =
+    activeCategory === "All"
+      ? categories.flatMap((cat) => cat.menuItemList || [])
+      : categories.find((cat) => cat.menuName === activeCategory) ?.menuItemList || [];
 
   return (
     <div className="h-screen bg-gray-50 flex flex-col">
@@ -144,3 +175,4 @@ const MenuManagement = () => {
 };
 
 export default MenuManagement;
+

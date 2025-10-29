@@ -8,3 +8,10 @@ interface ILoginUserBody {
  interface AxiosRequestConfig {
     requiresAuth?: boolean;
   }
+
+interface AddCategoryBody {
+  merchantId: string;
+  name: string;
+  description?: string;
+  image: File;
+}

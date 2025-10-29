@@ -7,29 +7,28 @@ declare module "axios" {
 }
 
 const httpClient = axios.create({
-  baseURL: "https://hc-il-api-dev.welthzone.com/",
+  baseURL: "http://localhost:9089/",
   headers: {
     deviceType: "Web",
-    "Content-Type": "application/json",
   },
   timeout: 30000,
 });
 
 httpClient.interceptors.request.use(
   (config) => {
-    if (!config.requiresAuth) {
-      return config;
+    // ✅ Only proceed if requiresAuth is true
+    if (config.requiresAuth) {
+      const token = localStorage.getItem("token");
+
+      // ✅ Add Authorization header only if token exists
+      if (token) {
+        config.headers["Authorization"] = `Bearer ${token}`;
+      } else {
+        console.warn("⚠️ No token found in localStorage. Request may be unauthorized.");
+      }
     }
 
-    const token = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("auth_token="))
-      ?.split("=")[1];
-
-    if (token) {
-      config.headers["Authorization"] = `Bearer ${token}`;
-    }
-
+    // ✅ Handle FormData (if uploading files)
     if (config.data instanceof FormData) {
       config.headers["Content-Type"] = "multipart/form-data";
     }

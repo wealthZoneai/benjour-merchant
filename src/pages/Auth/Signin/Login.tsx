@@ -9,6 +9,8 @@ import renderImage from "../../../utills/render-image";
 import googleIcon from "../../../assets/google-contained.svg";
 import facebookIcon from "../../../assets/facebook.svg";
 import appleIcon from "../../../assets/Apple.svg";
+import { loginUser } from "../../../services/apiHelpers";
+import { setUserData } from "../../../store/slice/userData";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -21,9 +23,27 @@ const Login: React.FC = () => {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Login successful!");
-    navigate("/dashboard");
+
+    loginUser({ email, password })
+      .then((response) => {
+        if (response.data && response.data.token) {
+          localStorage.setItem("token", response.data.token);
+          dispatch(setUserData({
+            token: response.data.token,
+            merchantId: response.data.merchantId,
+          }));
+          toast.success("Login successful!");
+          navigate("/dashboard");
+        } else {
+          toast.error("Login failed. Token not received.");
+        }
+      })
+      .catch((error) => {
+        console.error("Login failed:", error);
+        toast.error("Login failed. Please check your credentials.");
+      });
   };
+
 
   return (
     <div className="relative flex justify-center items-center min-h-screen overflow-hidden">
@@ -147,8 +167,6 @@ const Login: React.FC = () => {
           </a>
         </p>
       </motion.div>
-
-      <ToastContainer />
     </div>
   );
 };

@@ -1,7 +1,10 @@
+import AddCategoryModal from "src/pages/DashboardLayout/Dashboardscreens/MenuManagement/AddCategoryModal"
 
 const endpoints = {
 
- login: 'auth/v1/users/login',
+ login: 'api/Benjour/auth/login/merchant',
+ AddCategory: 'Merchant',
+ AllCategory: 'Merchant/getAllMenu',
 
 }
 
