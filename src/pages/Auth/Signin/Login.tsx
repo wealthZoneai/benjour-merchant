@@ -39,7 +39,6 @@ const Login: React.FC = () => {
         }
       })
       .catch((error) => {
-        console.error("Login failed:", error);
         toast.error("Login failed. Please check your credentials.");
       });
   };

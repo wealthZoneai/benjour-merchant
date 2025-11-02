@@ -5,9 +5,45 @@ import facebookIcon from "../../../assets/facebook.svg";
 import appleIcon from "../../../assets/Apple.svg";
 import renderImage from "../../../utills/render-image";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { RegisterUser } from "../../../services/apiHelpers";
+import { toast } from "react-toastify";
 
 const Signup: React.FC = () => {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!username || !email || !password) {
+      toast.warn("Please fill all fields.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await RegisterUser({ username, email, password });
+      if (response) {
+        if (response?.data === "Email already exists for a Merchant account!"){
+          toast.error("Email already exists for a Merchant account!");
+          return;
+        }
+        toast.success("OTP sent to your email!");
+        navigate("/otp", { state: { email } }); 
+      } else {
+        toast.error("Registration failed. Please try again.");
+      }
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "Signup failed. Try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="relative flex justify-center items-center min-h-screen overflow-hidden">
@@ -24,7 +60,7 @@ const Signup: React.FC = () => {
       <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/70"></div>
 
       {/* 🔹 Signup Card */}
-     <motion.div
+      <motion.div
         initial={{ opacity: 0, y: 40, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
@@ -39,7 +75,7 @@ const Signup: React.FC = () => {
         </p>
 
         {/* Form */}
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSignup}>
           {/* Full Name */}
           <div>
             <label className="block text-xs text-gray-300 mb-1">
@@ -48,6 +84,8 @@ const Signup: React.FC = () => {
             <input
               type="text"
               placeholder="Enter your name"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-md focus:ring-2 focus:ring-sky-400 focus:outline-none text-white placeholder-gray-300 text-sm"
               required
             />
@@ -61,6 +99,8 @@ const Signup: React.FC = () => {
             <input
               type="email"
               placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-md focus:ring-2 focus:ring-sky-400 focus:outline-none text-white placeholder-gray-300 text-sm"
               required
             />
@@ -73,6 +113,8 @@ const Signup: React.FC = () => {
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-md focus:ring-2 focus:ring-sky-400 focus:outline-none text-white placeholder-gray-300 text-sm pr-9"
                 required
               />
@@ -89,9 +131,14 @@ const Signup: React.FC = () => {
           {/* Signup Button */}
           <button
             type="submit"
-            className="w-full py-2 bg-gradient-to-r from-sky-400 to-blue-500 rounded-md text-white text-sm font-semibold shadow-lg hover:from-sky-500 hover:to-blue-600 transition-all duration-300"
+            disabled={loading}
+            className={`w-full py-2 bg-gradient-to-r from-sky-400 to-blue-500 rounded-md text-white text-sm font-semibold shadow-lg transition-all duration-300 ${
+              loading
+                ? "opacity-70 cursor-not-allowed"
+                : "hover:from-sky-500 hover:to-blue-600"
+            }`}
           >
-            Sign Up
+            {loading ? "Creating..." : "Sign Up"}
           </button>
         </form>
 

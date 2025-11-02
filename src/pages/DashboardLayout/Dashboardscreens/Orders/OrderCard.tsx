@@ -46,24 +46,24 @@ const OrderCard = ({ order }: OrderCardProps) => {
             <div className="relative bg-gradient-to-tr p-6 to-blue-50 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/30 p-6 flex flex-col justify-between h-full transition-transform hover:scale-[1.03] hover:shadow-3xl">
                 
                 {/* Status Badge */}
-                <div className="absolute top-4 right-4 z-10">{getStatusBadge(order.status)}</div>
+                <div className="absolute top-4 right-4 z-10">{getStatusBadge(order?.status)}</div>
 
                 {/* Header */}
                 <div className="mb-5">
-                    <h3 className="text-2xl font-bold text-gray-900">#{order.id}</h3>
-                    <p className="text-gray-500">{order.time}</p>
+                    <h3 className="text-2xl font-bold text-gray-900">#{order?.orderNumber}</h3>
+                    <p className="text-gray-500">{order?.orderDate}</p>
                 </div>
 
                 {/* Customer Info */}
                 <div className="flex flex-col space-y-3 mb-5">
                     {[
-                        { icon: User, value: order.customer },
-                        { icon: Phone, value: order.phone },
-                        { icon: MapPin, value: order.address },
+                        { icon: User, value: order?.customerName },
+                        { icon: Phone, value: order?.customerNumber },
+                        { icon: MapPin, value: order?.deliveryAddress },
                     ].map((info, idx) => (
                         <div key={idx} className="flex items-center gap-3 bg-white/60 backdrop-blur-xl p-3 rounded-xl shadow-md hover:shadow-lg transition-all">
                             <info.icon className="w-5 h-5 text-purple-500" />
-                            <span className="text-gray-900 font-medium">{info.value}</span>
+                            <span className="text-gray-900 font-medium line-clamp-4">{info.value}</span>
                         </div>
                     ))}
                 </div>
@@ -76,10 +76,10 @@ const OrderCard = ({ order }: OrderCardProps) => {
                     >
                         <p className="font-semibold text-gray-900 mb-3 text-lg">Items:</p>
                         <ul className="space-y-2 text-gray-800 text-sm">
-                            {order.items.map((item: any, idx: number) => (
+                            {order?.items.map((item: any, idx: number) => (
                                 <li key={idx} className="flex justify-between px-2 py-1 rounded-xl hover:bg-purple-50/50 transition">
-                                    <span>{item.quantity}x {item.name}</span>
-                                    <span className="font-medium">₹{item.price.toFixed(2)}</span>
+                                    <span>{item?.quantity}x {item?.productName}</span>
+                                    <span className="font-medium">₹{item?.totalPrice.toFixed(2)}</span>
                                 </li>
                             ))}
                         </ul>
@@ -92,7 +92,7 @@ const OrderCard = ({ order }: OrderCardProps) => {
                 {/* Total */}
                 <div className="flex justify-between items-center font-bold text-gray-900 mb-5 text-lg">
                     <span>Total:</span>
-                    <span className="text-xl">₹{order.total.toFixed(2)}</span>
+                    <span className="text-xl">₹{order?.totalAmount?.toFixed(2)}</span>
                 </div>
 
                 {/* Buttons */}

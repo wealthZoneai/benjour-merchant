@@ -4,14 +4,49 @@ interface ILoginUserBody {
   email: string;
   password: string;
 }
+interface RegisterUserBody {
+  username: string;
+  email: string;
+  password: string;
+}
+interface UserOtpBody {
+  role: string;
+  email: string;
+  otp: string;
+}
 
  interface AxiosRequestConfig {
     requiresAuth?: boolean;
   }
 
 interface AddCategoryBody {
-  merchantId: string;
+  merchantId: Number | string;
   name: string;
-  description?: string;
   image: File;
+}
+interface AddCategoryItemBody {
+  merchantId: string;
+  itemName: string;
+  itemDescription: string;
+  price: number;
+  available: boolean;
+  itemType: string;
+  preparationTime: number;
+  discount: number;
+  itemId: number;
+  ingredients: string;
+  imageFile: File;
+}
+interface UpdateCategoryItemBody {
+  Id: string;
+  itemName: string;
+  itemDescription: string;
+  price: number;
+  available: boolean;
+  itemType: string;
+  preparationTime: number;
+  discount: number;
+  itemId: number;
+  ingredients: string;
+  imageFile: File;
 }

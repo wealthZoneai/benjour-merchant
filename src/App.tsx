@@ -3,6 +3,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 import AppRouters from './Router/AppRouters'
 import NetworkStatusHandler from "./components/netWork/NetworkStatusHandler";
+import NewOrderPopup from "./components/NewOrderPopup";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <AppRouters />
     </div>
   );
+ 
 }
 
 export default App;

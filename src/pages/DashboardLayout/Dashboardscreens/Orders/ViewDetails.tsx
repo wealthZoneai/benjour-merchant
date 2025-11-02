@@ -58,28 +58,28 @@ const ViewDetails: React.FC<ViewDetailsProps> = ({ isOpen, onClose, initialData 
 
                 {/* Status Badge */}
                 <div className="absolute top-4 left-1/2 -translate-x-1/2">
-                    {getStatusBadge(initialData.status)}
+                    {getStatusBadge(initialData?.status)}
                 </div>
 
                 {/* Header */}
                 <div className="text-center mt-6">
-                    <h2 className="text-2xl font-bold text-gray-800">Order #{initialData.id}</h2>
-                    <p className="text-sm text-gray-500">{initialData.time}</p>
+                    <h2 className="text-2xl font-bold text-gray-800">Order #{initialData?.orderNumber}</h2>
+                    <p className="text-sm text-gray-500">{initialData?.orderDate}</p>
                 </div>
 
                 {/* Customer Info */}
                 <div className="grid grid-cols-1 gap-2 md:grid-cols-3 text-gray-700 text-sm">
                     {[
-                        { icon: User, label: initialData.customer },
-                        { icon: Phone, label: initialData.phone },
-                        { icon: MapPin, label: initialData.address },
+                        { icon: User, label: initialData?.customerName },
+                        { icon: Phone, label: initialData?.customerNumber },
+                        { icon: MapPin, label: initialData?.deliveryAddress },
                     ].map((info, idx) => (
                         <div
                             key={idx}
                             className="flex items-center gap-2 p-2 rounded-xl bg-gray-50 shadow-inner hover:shadow-lg transition-shadow"
                         >
                             <info.icon className="w-4 h-4 text-gray-600" />
-                            <span>{info.label}</span>
+                             <span className="text-gray-900 font-medium line-clamp-4">{info.label}</span>
                         </div>
                     ))}
                 </div>
@@ -92,13 +92,13 @@ const ViewDetails: React.FC<ViewDetailsProps> = ({ isOpen, onClose, initialData 
                     >
                         <p className="text-gray-800 font-semibold mb-2">Items Ordered</p>
                         <ul className="space-y-2">
-                            {initialData.items?.map((item: any, idx: number) => (
+                            {initialData?.items?.map((item: any, idx: number) => (
                                 <li
                                     key={idx}
                                     className="flex justify-between px-3 py-2 rounded-lg bg-white shadow hover:shadow-md transition-shadow"
                                 >
-                                    <span>{item.quantity}x {item.name}</span>
-                                    <span>₹{item.price.toFixed(2)}</span>
+                                    <span>{item?.quantity}x {item?.productName}</span>
+                                    <span>₹{item?.totalPrice.toFixed(2)}</span>
                                 </li>
                             ))}
                         </ul>
@@ -111,7 +111,7 @@ const ViewDetails: React.FC<ViewDetailsProps> = ({ isOpen, onClose, initialData 
                 {/* Total */}
                 <div className="flex justify-between items-center mt-2 p-3 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white font-bold text-lg shadow-md">
                     <span>Total</span>
-                    <span>₹{initialData.total?.toFixed(2)}</span>
+                    <span>₹{initialData?.totalAmount?.toFixed(2)}</span>
                 </div>
 
             </div>

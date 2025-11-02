@@ -4,10 +4,12 @@ import { RefreshCcw, Download, Search } from "lucide-react";
 interface HeaderProps {
   orders: any[];
   onRefresh?: () => void;
+  onSearchQueryChange?: (query: string) => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ orders, onRefresh }) => {
+const Header: React.FC<HeaderProps> = ({ orders, onRefresh, onSearchQueryChange }) => {
   const [isRotating, setIsRotating] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleRefreshClick = () => {
     setIsRotating(true);
@@ -38,6 +40,12 @@ const Header: React.FC<HeaderProps> = ({ orders, onRefresh }) => {
     document.body.removeChild(link);
   };
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchQuery(value);
+    if (onSearchQueryChange) onSearchQueryChange(value);
+  };
+
   return (
     <div className="bg-white p-4 md:p-6 shadow-md flex flex-col md:flex-row md:justify-between md:items-center gap-4 md:gap-0 sticky top-0 z-20">
       {/* Title */}
@@ -56,6 +64,8 @@ const Header: React.FC<HeaderProps> = ({ orders, onRefresh }) => {
         <div className="relative flex-1 min-w-[180px] sm:min-w-[250px]">
           <input
             type="text"
+            value={searchQuery}
+            onChange={handleSearchChange}
             placeholder="Search By Order ID, Customer Name..."
             className="w-full p-2 pl-10 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />

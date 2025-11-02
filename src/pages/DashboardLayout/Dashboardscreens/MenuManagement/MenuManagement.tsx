@@ -4,62 +4,10 @@ import MenuItemCard from './MenuItemCard';
 import CategoryTabs from './CategoryTabs';
 import AddCategoryModal from './AddCategoryModal';
 import AddMenuItemModal from './Addmenuitem';
-import { AllCategory } from '../../../../services/apiHelpers';
+import { AllCategory, AllCategoryItems, SearchCategoryItems } from '../../../../services/apiHelpers';
 import { toast } from 'react-toastify';
-
-// --- Mock Data ---
-const menuItems = [
-  {
-    id: 1,
-    name: 'Classic Chicken Burger',
-    description: 'Grilled Chicken Breast With Lettuce, Tomato, And Mayo',
-    image: 'https://via.placeholder.com/600x400/93c5fd/ffffff?text=Chicken+Burger',
-    prepTime: 15,
-    category: 'Burger',
-    status: 'Available',
-    ingredients: ['Chicken Breast', 'Lettuce', 'Tomato', 'Mayo', 'Onion'],
-  },
-  {
-    id: 2,
-    name: 'Margherita Pizza',
-    description: 'Fresh Mozzarella, Tomato Sauce, And Basil',
-    image: 'https://via.placeholder.com/600x400/fcd34d/ffffff?text=Margherita+Pizza',
-    prepTime: 20,
-    category: 'Pizza',
-    status: 'Available',
-    ingredients: ['Pizza Dough', 'Tomato Sauce', 'Mozzarella', 'Basil', 'Olive Oil'],
-  },
-  {
-    id: 3,
-    name: 'Caesar Salad',
-    description: 'Crisp Romaine Lettuce With Parmesan And Croutons',
-    image: 'https://via.placeholder.com/600x400/cccccc/000000?text=Caesar+Salad',
-    prepTime: 10,
-    category: 'Salads',
-    status: 'Unavailable',
-    ingredients: ['Romaine Lettuce', 'Parmesan Cheese', 'Croutons', 'Caesar Dressing'],
-  },
-  {
-    id: 3,
-    name: 'Caesar Salad',
-    description: 'Crisp Romaine Lettuce With Parmesan And Croutons',
-    image: 'https://via.placeholder.com/600x400/cccccc/000000?text=Caesar+Salad',
-    prepTime: 10,
-    category: 'Salads',
-    status: 'Unavailable',
-    ingredients: ['Romaine Lettuce', 'Parmesan Cheese', 'Croutons', 'Caesar Dressing'],
-  },
-  {
-    id: 3,
-    name: 'Caesar Salad',
-    description: 'Crisp Romaine Lettuce With Parmesan And Croutons',
-    image: 'https://via.placeholder.com/600x400/cccccc/000000?text=Caesar+Salad',
-    prepTime: 10,
-    category: 'Salads',
-    status: 'Unavailable',
-    ingredients: ['Romaine Lettuce', 'Parmesan Cheese', 'Croutons', 'Caesar Dressing'],
-  },
-];
+// import { useLoader } from '../../../../global/LoaderContext';
+import NewOrderPopup from '../../../../components/NewOrderPopup';
 
 interface MenuItem {
   id: string;
@@ -75,31 +23,85 @@ interface Category {
 }
 
 const MenuManagement = () => {
-  const [activeCategory, setActiveCategory] = useState('All');
+  const [activeCategory, setActiveCategory] = useState('all');
   const [isCategoryModalOpen, setCategoryModalOpen] = useState(false);
   const [isMenuModalOpen, setMenuModalOpen] = useState(false);
+  const [isMenuModalSave, setMenuModalSave] = useState(false);
+  const [isMenuCatagoryModalSave, setMenuCatagoryModalSave] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [categoriesItems, setCategoriesItems] = useState<MenuItem[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<MenuItem[]>([]);
+  const [loading, setLoading] = useState(false);
+  // const { showLoader, hideLoader } = useLoader();
 
- // ✅ Fetch categories
+  // 🟢 Fetch all categories initially
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const response = await AllCategory();
-        if (response?.data) {
-          setCategories(response.data);
-          console.log("Fetched Categories:", response.data);
-        }
+        if (response?.data) setCategories(response.data);
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
     };
     fetchCategories();
-  }, []);
+   
+  }, [isMenuCatagoryModalSave]);
+
+  // 🟢 Fetch category items by ID
+  useEffect(() => {
+    const fetchCategoryItems = async () => {
+      if (activeCategory === 'all') return;
+      try {
+        const response = await AllCategoryItems(activeCategory);
+        if (response?.data) setCategoriesItems(response.data);
+        if (response?.data) {
+          setMenuModalSave( prev=> !prev);
+        }
+      } catch (error) {
+        console.error("Error fetching category items:", error);
+      }
+    };
+    fetchCategoryItems();
+  }, [activeCategory,isMenuModalSave]);
+
+  // 🔍 Handle search
+  useEffect(() => {
+    const fetchSearchResults = async () => {
+      if (!searchQuery.trim()) {
+        setSearchResults([]);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const response = await SearchCategoryItems(searchQuery); 
+        if (response?.data) {
+          setSearchResults(response.data);
+        } else {
+          setSearchResults([]);
+        }
+      } catch (error) {
+        console.error("Error searching items:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const debounceTimeout = setTimeout(fetchSearchResults, 500);
+    return () => clearTimeout(debounceTimeout);
+  }, [searchQuery]);
+
 
   const filteredItems: MenuItem[] =
-    activeCategory === "All"
-      ? categories.flatMap((cat) => cat.menuItemList || [])
-      : categories.find((cat) => cat.menuName === activeCategory) ?.menuItemList || [];
+    searchQuery.trim()
+      ? searchResults
+      : activeCategory === 'all'
+        ? categories.flatMap((cat) => cat.menuItemList || [])
+        : categoriesItems;
+
+  const isSearching = searchQuery.trim().length > 0;
 
   return (
     <div className="h-screen bg-gray-50 flex flex-col">
@@ -115,8 +117,10 @@ const MenuManagement = () => {
           <div className="relative w-full sm:w-64">
             <input
               type="text"
-              placeholder="Search By Menu items"
+              placeholder="Search by menu items"
               className="w-full p-2 pl-10 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
           </div>
@@ -142,20 +146,22 @@ const MenuManagement = () => {
 
       {/* Body */}
       <main className="flex-1 overflow-hidden flex flex-col p-3">
-        {/* Category Tabs */}
-        <div className="bg-white rounded-lg shadow-md mb-4 border-b border-gray-200 p-4 flex-shrink-0">
-          <CategoryTabs activeTab={activeCategory} setActiveTab={setActiveCategory} />
-        </div>
+        {/* 🧭 Show Category Tabs only when NOT searching */}
+        {!isSearching && (
+          <div className="bg-white rounded-lg shadow-md mb-4 border-b border-gray-200 p-4 flex-shrink-0">
+            <CategoryTabs activeTab={activeCategory} setActiveTab={setActiveCategory} addedCatagory={isMenuCatagoryModalSave}/>
+          </div>
+        )}
 
-        {/* Menu Items Grid */}
+        {/* 🧾 Menu Items Grid */}
         <div className="flex-1 overflow-y-auto p-2 md:p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredItems.map((item) => (
-            <MenuItemCard key={item.id} item={item} />
-          ))}
-
-          {filteredItems.length === 0 && (
+          {loading ? (
+            <p className="text-center text-gray-500 col-span-full py-10">Searching...</p>
+          ) : filteredItems.length > 0 ? (
+            filteredItems.map((item) => <MenuItemCard key={item.id} item={item} menuisUpdate={setMenuModalSave}/>)
+          ) : (
             <p className="text-gray-500 col-span-full text-center py-10">
-              No items found in the <strong>{activeCategory}</strong> category.
+              {isSearching ? 'No matching items found.' : 'No items in this category.'}
             </p>
           )}
         </div>
@@ -165,14 +171,16 @@ const MenuManagement = () => {
       <AddCategoryModal
         isOpen={isCategoryModalOpen}
         onClose={() => setCategoryModalOpen(false)}
+        onSave={() =>  setMenuCatagoryModalSave((prev) => !prev)}
       />
       <AddMenuItemModal
         isOpen={isMenuModalOpen}
         onClose={() => setMenuModalOpen(false)}
+        onSave={() => setMenuModalSave(true)}
+        editData={null}
       />
     </div>
   );
 };
 
 export default MenuManagement;
-
