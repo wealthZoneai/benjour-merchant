@@ -47,15 +47,14 @@ export async function AddCategory({ merchantId, name, image }: AddCategoryBody) 
 
   return server.post(`${endpoints.AddCategory}/${id}`, formData, { requiresAuth: true });
 }
-export async function UpdateCategory({ merchantId, name, image }: AddCategoryBody) {
-  const id = `${merchantId}/updateMenu`;
+export async function UpdateCategory({id, name, image }: UpdateCategoryBody) {
+  const Id = `${id}/updateMenu`;
 
   const formData = new FormData();
-  formData.append("merchantId", Number(merchantId).toString());
   formData.append("name", name);
   formData.append("image", image);
 
-  return server.post(`${endpoints.AddCategory}/${id}`, formData, { requiresAuth: true });
+  return server.put(`${endpoints.AddCategory}/${Id}`, formData, { requiresAuth: true });
 }
 
 export async function AddCategoryItem({
@@ -91,32 +90,29 @@ export async function UpdateCategoryItem({
   itemDescription,
   price,
   available,
-  itemType,
-  preparationTime,
-  discount,
   ingredients,
-  imageFile,
-  itemId,
+  imageUrl,
+  menuId,
 }:UpdateCategoryItemBody) {
   const formData = new FormData();
   formData.append("itemName", itemName);
-  formData.append("itemId", itemId.toString());
+  formData.append("menuId", menuId.toString());
   formData.append("itemDescription", itemDescription);
   formData.append("price", price.toString());
   formData.append("available", available.toString());
-  formData.append("itemType", itemType);
-  formData.append("preparationTime", preparationTime.toString());
-  formData.append("discount", discount.toString());
   formData.append("ingredients", ingredients);
-  formData.append("imageFile", imageFile);
+  formData.append("imageUrl", imageUrl);
 
-  return server.put(`${endpoints.UpdateCategoryItem}/${Id}`, formData, { requiresAuth: true });
+  return server.put(`${endpoints.UpdateCategoryItem}${Id}`, formData, { requiresAuth: true });
 }
 
 
 // ... orders services
 export function GetAllOrders(merchantId?: number) {
   return server.get(`${endpoints.GetAllOrders}/${merchantId}`, { requiresAuth: true });
+}
+export function GetStatusOrders(merchantId?: number) {
+  return server.get(`${endpoints.GetStatusOrder}${merchantId}`, { requiresAuth: true });
 }
 export function GetByOrderStatus(statusName?: string) {
   return server.get(`${endpoints.GetByOrderStatus}${statusName}`, { requiresAuth: true });

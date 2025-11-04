@@ -31,9 +31,10 @@ const Login: React.FC = () => {
           dispatch(setUserData({
             token: response.data.token,
             merchantId: response.data.merchantId,
+            userName: response.data.username,
           }));
           toast.success("Login successful!");
-          navigate("/dashboard");
+           window.location.replace("/dashboard");
         } else {
           toast.error("Login failed. Token not received.");
         }

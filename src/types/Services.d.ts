@@ -24,6 +24,12 @@ interface AddCategoryBody {
   name: string;
   image: File;
 }
+interface UpdateCategoryBody {
+  id: Number | string;
+  name: string;
+  image: File;
+  description?: string;
+}
 interface AddCategoryItemBody {
   merchantId: string;
   itemName: string;
@@ -43,10 +49,7 @@ interface UpdateCategoryItemBody {
   itemDescription: string;
   price: number;
   available: boolean;
-  itemType: string;
-  preparationTime: number;
-  discount: number;
-  itemId: number;
+  menuId: number;
   ingredients: string;
-  imageFile: File;
+  imageUrl: File;
 }

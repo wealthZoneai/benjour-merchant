@@ -7,6 +7,8 @@ import Orders from "../../assets/Orders.svg";
 import Feelt from "../../assets/Feelt.svg";
 import Profile from "../../assets/Profile.svg";
 import Help from "../../assets/help.svg";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
 
 interface MenuItem {
   id: number;
@@ -19,6 +21,7 @@ const Sidebar: React.FC = () => {
   const [activeItem, setActiveItem] = useState<number | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const userName = useSelector((state: RootState) => state.user.userName);
 
   const menuItems: MenuItem[] = [
     {
@@ -98,10 +101,10 @@ const Sidebar: React.FC = () => {
         {/* 🔹 User Info Footer */}
         <div className="bg-[#0088EE] py-4 px-5 flex items-center gap-3 shrink-0">
           <div className="w-10 h-10 rounded-full bg-white text-[#0099FF] flex items-center justify-center font-bold">
-            J
+            {userName?.slice(0,1)}
           </div>
           <div>
-            <p className="font-semibold text-sm">John Restaurant</p>
+            <p className="font-semibold text-sm">{userName}</p>
             <p className="text-xs opacity-80">Owner</p>
           </div>
         </div>

@@ -32,9 +32,8 @@ const CategoryTabs: React.FC<CategoryTabsProps> = ({
   const [selectedId, setSelectedId] = useState<number | null | string>(null);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [catagoryDelete, setCatagoryDelete] = useState(false);
-    const [isMenuModalOpen, setMenuModalOpen] = useState(false);
-    const [isMenuModalSave, setMenuModalSave] = useState(false);
-    
+  const [isMenuModalOpen, setMenuModalOpen] = useState(false);
+  const [isMenuModalSave, setMenuModalSave] = useState(false);
 
   const fallbackImage =
     "https://cdn-icons-png.flaticon.com/512/706/706164.png";
@@ -58,7 +57,7 @@ const CategoryTabs: React.FC<CategoryTabsProps> = ({
       }
     };
     fetchCategories();
-  }, [catagoryDelete, addedCatagory]);
+  }, [catagoryDelete, addedCatagory, isMenuModalSave]);
 
   const handleClick = (id: string) => {
     if (selectedForEdit === id) return;
@@ -131,7 +130,7 @@ const CategoryTabs: React.FC<CategoryTabsProps> = ({
                         [cat.menuId]: true,
                       }));
                     }}
-                    className="w-15 h-15 object-contain rounded-full relative z-10"
+                    className="object-contain rounded-full relative z-10"
                   />
                 </div>
                 {/* Category Name */}
@@ -186,7 +185,7 @@ const CategoryTabs: React.FC<CategoryTabsProps> = ({
       <AddCategoryModal
         isOpen={isMenuModalOpen}
         onClose={() => setMenuModalOpen(false)}
-        onSave={(prev) => setMenuModalSave((prev) => !prev)}
+        onSave={() => setMenuModalSave((prev) => !prev)}
         isEdit={true}
         editData={categories.find(cat => cat.menuId === selectedForEdit) || null}
       />

@@ -1,4 +1,3 @@
-// src/components/RestaurantProfileForm.js
 import React from 'react';
 
 // Mock data for operating hours structure
@@ -17,7 +16,7 @@ const RestaurantProfileForm = () => {
     const [operatingHours, setOperatingHours] = React.useState(initialHours);
 
     // Simple handler to mimic checking/unchecking a day
-    const handleCheck = (dayIndex) => {
+    const handleCheck = (dayIndex:any) => {
         setOperatingHours(prevHours => prevHours.map((item, index) => 
             index === dayIndex ? { ...item, checked: !item.checked } : item
         ));
@@ -43,7 +42,7 @@ const RestaurantProfileForm = () => {
                 </div>
                 <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                    <textarea rows="4" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="Description"></textarea>
+                    <textarea rows= {4} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="Description"></textarea>
                 </div>
             </div>
 

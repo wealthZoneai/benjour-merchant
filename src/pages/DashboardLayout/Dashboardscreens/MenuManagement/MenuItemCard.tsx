@@ -25,7 +25,7 @@ const MenuItemCard = ({ item, itemCount,menuisUpdate }: any) => {
     : "bg-red-500/90 text-white";
   const badgeText = isAvailable ? "Available" : "Unavailable";
 
-
+console.log('item',item)
 
   const handleOpenDelete = (id: number) => {
     setSelectedId(id);

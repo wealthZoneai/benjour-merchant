@@ -17,7 +17,7 @@ const OrderManagement = () => {
   const [loading, setLoading] = useState(false);
 
   const merchantId = useSelector((state: RootState) => state.user.merchantId);
-   const [showPopup, setShowPopup] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 
   const handleNewOrder = () => {
     setShowPopup(true);
@@ -70,7 +70,7 @@ const OrderManagement = () => {
 
       try {
         setLoading(true);
-        const response = await GetSearchByOrders(merchantId,searchQuery);
+        const response = await GetSearchByOrders(merchantId, searchQuery);
         if (response?.data?.orders) {
           setSearchResults(response.data.orders);
         } else {
@@ -97,7 +97,7 @@ const OrderManagement = () => {
         orders={allOrders}
         onSearchQueryChange={(query) => setSearchQuery(query)} // ← gets search input
       />
-       <button
+      <button
         onClick={handleNewOrder}
         className="bg-blue-600 text-white px-4 py-2 rounded-lg"
       >
@@ -106,14 +106,18 @@ const OrderManagement = () => {
 
       <div className="flex-1 flex flex-col p-3 overflow-hidden">
         {/* Tabs + Date Picker */}
-        {!searchQuery && <div className="bg-white rounded-lg shadow-md border-b border-gray-200 p-2 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
-          <div className="flex-1 w-full">
-            <OrderFilterTabs activeTab={activeTab} setActiveTab={setActiveTab} counts={{}} />
+        {!searchQuery && <div className="bg-white rounded-lg shadow-md border-b border-gray-200 p-3 flex flex-col md:flex-row items-center justify-between gap-3">
+          {/* 🟢 Tabs Section */}
+          <div className="flex-1 min-w-0 overflow-x-auto no-scrollbar">
+            <OrderFilterTabs activeTab={activeTab} setActiveTab={setActiveTab} />
           </div>
-          <div className="w-full md:w-auto self-start md:self-auto">
+
+          {/* 🗓️ Calendar Section */}
+          <div className="flex items-center justify-end md:justify-center shrink-0">
             <DateRangePicker />
           </div>
-        </div>}
+        </div>
+        }
 
         {/* Orders Grid */}
         <div className="flex-1 overflow-y-auto mt-3">
@@ -125,19 +129,19 @@ const OrderManagement = () => {
             </p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {displayedOrders.map((order) => (
-                <OrderCard key={order.id} order={order} />
+              {displayedOrders.map((order,index) => (
+                <OrderCard key={order.id || index} order={order} />
               ))}
             </div>
           )}
         </div>
       </div>
-        {showPopup && (
+      {showPopup && (
         <NewOrderPopup
           order={{ id: 101, customerName: "Ravi", total: 299 }}
           onAccept={(id) => console.log("✅ Accepted Order:", id)}
           onReject={(id) => console.log("❌ Rejected Order:", id)}
-          onClose={() => setShowPopup(false)} 
+          onClose={() => setShowPopup(false)}
           autoAcceptTime={10}
         />
       )}

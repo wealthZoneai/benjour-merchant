@@ -1,8 +1,12 @@
-// src/pages/SettingsPage.js (Main Layout)
+// src/pages/SettingsPage.js (Updated Main Layout)
 import React, { useState } from 'react';
 import SettingsSidebar from './SettingsSidebar';
 import RestaurantProfileForm from './RestaurantProfileForm';
-// Other content components (Notifications, Payment, etc.) would be imported here
+// Import the new TypeScript component
+import NotificationSettings from './NotificationSettings'; 
+import PaymentSettings from './PaymentSettings';
+import UserManagement from './UserManagement';
+import SecuritySettings from './SecuritySettings';
 
 const Settings = () => {
     const [activeSetting, setActiveSetting] = useState('Restaurant Profile');
@@ -13,13 +17,15 @@ const Settings = () => {
             case 'Restaurant Profile':
                 return <RestaurantProfileForm />;
             case 'Notifications':
-                return <div className="flex-1 p-6 bg-white rounded-xl shadow-md text-center text-gray-500">Notifications Settings Content</div>;
+                // *** Use the new component here ***
+                return <NotificationSettings />; 
+            // ... other cases remain the same
             case 'Payment Settings':
-                return <div className="flex-1 p-6 bg-white rounded-xl shadow-md text-center text-gray-500">Payment Settings Content</div>;
+                return<PaymentSettings />
             case 'User Management':
-                return <div className="flex-1 p-6 bg-white rounded-xl shadow-md text-center text-gray-500">User Management Content</div>;
+                return <UserManagement/>
             case 'Security':
-                return <div className="flex-1 p-6 bg-white rounded-xl shadow-md text-center text-gray-500">Security Settings Content</div>;
+                return <SecuritySettings/>
             default:
                 return null;
         }
@@ -27,21 +33,18 @@ const Settings = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 p-6 md:p-8">
-            {/* Header */}
+            {/* Header and Layout */}
+            {/* ... (rest of the Settings component structure is the same) ... */}
             <header className="mb-6">
                 <h1 className="text-3xl font-bold text-gray-800">Settings</h1>
                 <p className="text-gray-600 mt-1">Manage Your Restaurant Settings And Preferences</p>
             </header>
 
-            {/* Main Content Area: Sidebar + Content */}
             <div className="flex flex-col lg:flex-row gap-6 h-full">
-                {/* 1. Sidebar */}
                 <SettingsSidebar 
                     activeItem={activeSetting} 
                     setActiveItem={setActiveSetting} 
                 />
-
-                {/* 2. Content */}
                 {renderContent()}
             </div>
         </div>

@@ -7,17 +7,26 @@ interface ViewDetailsProps {
     initialData: any;
 }
 
-  const getStatusBadge = (status: string) => {
+   const getStatusBadge = (status: string) => {
         const badgeMap: Record<string, { bg: string; text: string }> = {
-            'New': { bg: 'bg-red-500', text: 'New Order' },
-            'Preparing': { bg: 'bg-yellow-400', text: 'Preparing' },
-            'Ready': { bg: 'bg-blue-500', text: 'Ready' },
-            'Assigned': { bg: 'bg-purple-500', text: 'Assigned' },
-            'Out Of Delivery': { bg: 'bg-red-600', text: 'Out Of Delivery' },
+            PLACED: { bg: "bg-green-500", text: "Placed" },
+            ACCEPTED: { bg: "bg-emerald-500", text: "Accepted" },
+            PREPARING: { bg: "bg-yellow-400", text: "Preparing" },
+            READY: { bg: "bg-blue-500", text: "Ready" },
+            ASSIGNED: { bg: "bg-purple-500", text: "Assigned" },
+            PICKED_UP: { bg: "bg-indigo-500", text: "Picked Up" },
+            IN_TRANSIT: { bg: "bg-orange-500", text: "In Transit" },
+            DELIVERED: { bg: "bg-cyan-500", text: "Delivered" },
+            REJECTED: { bg: "bg-gray-500", text: "Rejected" },
+            CANCELLED: { bg: "bg-red-600", text: "Cancelled" },
         };
-        const badge = badgeMap[status] || { bg: 'bg-gray-300', text: status };
+
+        const badge = badgeMap[status] || { bg: "bg-gray-300", text: status };
+
         return (
-            <span className={`px-3 py-1 rounded-full text-xs font-semibold shadow-md ${badge.bg} text-white animate-pulse`}>
+            <span
+                className={`px-3 py-1 rounded-full text-xs font-semibold shadow-md ${badge.bg} text-white animate-pulse`}
+            >
                 {badge.text}
             </span>
         );

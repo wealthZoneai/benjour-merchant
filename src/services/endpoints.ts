@@ -8,7 +8,7 @@ const endpoints = {
  AddCategory: 'Merchant',
  deleteCategory: 'Merchant',
  AddCategoryItem: 'Merchant/menuItem',
- UpdateCategoryItem: 'Merchant/menuItem/update',
+ UpdateCategoryItem: 'Merchant/menuItem/update/',
  deleteCategoryItem: 'Merchant/menuItem/delete',
  searchCategoryItem: 'Search/Food?keyword=',
  AllCategory: 'Merchant/getAllMenu',
@@ -18,7 +18,8 @@ const endpoints = {
  GetAllOrders: 'orders/merchant',
  UpdateOrderStatus: 'Merchant/orders/updateStatus',
  GetByOrderStatus: 'orders/GetByOrderStatus?merchantId=1&orderStatus=',
- GetSearchByOrder: '/orders/searchbar?merchantId=',
+ GetSearchByOrder: 'orders/searchbar?merchantId=',
+ GetStatusOrder: 'orders/getAllStatusCounts?merchantId=',
 
 }
 

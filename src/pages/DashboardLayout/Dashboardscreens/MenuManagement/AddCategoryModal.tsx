@@ -17,8 +17,8 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({
   isOpen,
   onClose,
   onSave,
-  isEdit = false,
-  editData = null,
+  isEdit,
+  editData,
 }) => {
   const merchantId = useSelector((state: RootState) => state.user.merchantId);
   const [categoryName, setCategoryName] = useState('');
@@ -30,10 +30,11 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({
   // ✅ Pre-fill data in edit mode
   useEffect(() => {
     if (isEdit && editData) {
-      setCategoryName(editData.menuName || '');
-      setImagePreview(editData.menuImage || null); // adjust key if API returns something different
+      setCategoryName(editData.name || editData.menuName || '');
+      setImagePreview(editData.menuImage || null);
     }
-  }, [isEdit, editData]);
+  }, [isEdit, isOpen]);
+
 
   if (!isOpen) return null;
 
@@ -78,19 +79,24 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({
       let response;
 
       if (isEdit) {
-        // ✅ Update existing category
-        response = await UpdateCategory({
-          merchantId,
+        const payload: any = {
+          id: editData.menuId,
           name: categoryName,
-          image: imageFile || new File([], ''),
-        });
+        };
+
+        // ✅ Only send image if new one is uploaded
+        if (imageFile) {
+          payload.image = imageFile;
+        }
+
+        response = await UpdateCategory(payload);
         toast.success('Category updated successfully!');
       } else {
         // ✅ Add new category
         response = await AddCategory({
           merchantId,
           name: categoryName,
-          image: imageFile || new File([], ''),
+          image: imageFile!,
         });
         toast.success('Category added successfully!');
       }
@@ -103,6 +109,7 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({
       setLoading(false);
     }
   };
+
 
   return (
     <div
@@ -183,9 +190,8 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({
           <button
             onClick={handleSave}
             disabled={loading}
-            className={`px-4 py-2 bg-blue-500 text-white font-medium rounded-lg shadow-md hover:bg-blue-600 transition ${
-              loading ? 'opacity-50 cursor-not-allowed' : ''
-            }`}
+            className={`px-4 py-2 bg-blue-500 text-white font-medium rounded-lg shadow-md hover:bg-blue-600 transition ${loading ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
           >
             {loading ? 'Saving...' : isEdit ? 'Update' : 'Save'}
           </button>

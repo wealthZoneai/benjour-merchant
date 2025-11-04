@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { User, Phone, MapPin } from 'lucide-react';
 import ViewDetails from './ViewDetails';
+import OrderActionModal from './OrderActionModal';
 
 interface OrderCardProps {
     order: any;
@@ -11,6 +12,10 @@ const OrderCard = ({ order }: OrderCardProps) => {
     const [isScrollable, setIsScrollable] = useState(false);
     const [isAtBottom, setIsAtBottom] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isActionOpen, setIsActionOpen] = useState(false);
+    const [selectedOrder, setSelectedOrder] = useState<any>(null);
+
+
 
     useEffect(() => {
         const listEl = listRef.current;
@@ -27,24 +32,40 @@ const OrderCard = ({ order }: OrderCardProps) => {
 
     const getStatusBadge = (status: string) => {
         const badgeMap: Record<string, { bg: string; text: string }> = {
-            'New': { bg: 'bg-green-500', text: 'New Order' },
-            'Preparing': { bg: 'bg-yellow-400', text: 'Preparing' },
-            'Ready': { bg: 'bg-blue-500', text: 'Ready' },
-            'Assigned': { bg: 'bg-purple-500', text: 'Assigned' },
-            'Out Of Delivery': { bg: 'bg-red-600', text: 'Out Of Delivery' },
+            PLACED: { bg: "bg-green-500", text: "Placed" },
+            ACCEPTED: { bg: "bg-emerald-500", text: "Accepted" },
+            PREPARING: { bg: "bg-yellow-400", text: "Preparing" },
+            READY: { bg: "bg-blue-500", text: "Ready" },
+            ASSIGNED: { bg: "bg-purple-500", text: "Assigned" },
+            PICKED_UP: { bg: "bg-indigo-500", text: "Picked Up" },
+            IN_TRANSIT: { bg: "bg-orange-500", text: "In Transit" },
+            DELIVERED: { bg: "bg-cyan-500", text: "Delivered" },
+            REJECTED: { bg: "bg-gray-500", text: "Rejected" },
+            CANCELLED: { bg: "bg-red-600", text: "Cancelled" },
         };
-        const badge = badgeMap[status] || { bg: 'bg-gray-300', text: status };
+
+        const badge = badgeMap[status] || { bg: "bg-gray-300", text: status };
+
         return (
-            <span className={`px-3 py-1 rounded-full text-xs font-semibold shadow-md ${badge.bg} text-white animate-pulse`}>
+            <span
+                className={`px-3 py-1 rounded-full text-xs font-semibold shadow-md ${badge.bg} text-white animate-pulse`}
+            >
                 {badge.text}
             </span>
         );
     };
 
+
+    const handleStatusChange = (newStatus: string) => {
+        // Call your API here to update status
+        console.log("Updated status to:", newStatus);
+        setIsActionOpen(false);
+    };
+
     return (
         <>
             <div className="relative bg-gradient-to-tr p-6 to-blue-50 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/30 p-6 flex flex-col justify-between h-full transition-transform hover:scale-[1.03] hover:shadow-3xl">
-                
+
                 {/* Status Badge */}
                 <div className="absolute top-4 right-4 z-10">{getStatusBadge(order?.status)}</div>
 
@@ -105,6 +126,7 @@ const OrderCard = ({ order }: OrderCardProps) => {
                     </button>
                     <button
                         className="flex-1 py-3 rounded-2xl bg-gradient-to-r from-blue-400 to-blue-600 text-white font-semibold hover:scale-105 hover:shadow-xl transition-transform shadow-md"
+                        onClick={() => setIsActionOpen(true)}
                     >
                         {order.status === 'New' ? 'Start Preparing' : 'Action'}
                     </button>
@@ -116,6 +138,13 @@ const OrderCard = ({ order }: OrderCardProps) => {
                 onClose={() => setIsModalOpen(false)}
                 initialData={order}
             />
+            <OrderActionModal
+                isOpen={isActionOpen}
+                onClose={() => setIsActionOpen(false)}
+                currentStatus={selectedOrder?.status || "New"}
+                onStatusChange={handleStatusChange}
+            />
+
         </>
     );
 };

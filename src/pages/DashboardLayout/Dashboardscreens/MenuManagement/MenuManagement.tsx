@@ -56,9 +56,6 @@ const MenuManagement = () => {
       try {
         const response = await AllCategoryItems(activeCategory);
         if (response?.data) setCategoriesItems(response.data);
-        if (response?.data) {
-          setMenuModalSave( prev=> !prev);
-        }
       } catch (error) {
         console.error("Error fetching category items:", error);
       }
@@ -91,7 +88,7 @@ const MenuManagement = () => {
 
     const debounceTimeout = setTimeout(fetchSearchResults, 500);
     return () => clearTimeout(debounceTimeout);
-  }, [searchQuery]);
+  }, [searchQuery,isMenuModalSave]);
 
 
   const filteredItems: MenuItem[] =
@@ -158,7 +155,7 @@ const MenuManagement = () => {
           {loading ? (
             <p className="text-center text-gray-500 col-span-full py-10">Searching...</p>
           ) : filteredItems.length > 0 ? (
-            filteredItems.map((item) => <MenuItemCard key={item.id} item={item} menuisUpdate={setMenuModalSave}/>)
+            filteredItems.map((item, index) => <MenuItemCard  key={item.id || index} item={item} menuisUpdate={setMenuModalSave}/>)
           ) : (
             <p className="text-gray-500 col-span-full text-center py-10">
               {isSearching ? 'No matching items found.' : 'No items in this category.'}
@@ -172,11 +169,13 @@ const MenuManagement = () => {
         isOpen={isCategoryModalOpen}
         onClose={() => setCategoryModalOpen(false)}
         onSave={() =>  setMenuCatagoryModalSave((prev) => !prev)}
+        isEdit={false}
+        editData={null}
       />
       <AddMenuItemModal
         isOpen={isMenuModalOpen}
         onClose={() => setMenuModalOpen(false)}
-        onSave={() => setMenuModalSave(true)}
+        onSave={() => setMenuModalSave((prev) => !prev)}
         editData={null}
       />
     </div>

@@ -1,6 +1,10 @@
 import { Search, UserCircle } from 'lucide-react';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../store';
 
 const Header = () => {
+  const userName = useSelector((state: RootState) => state.user.userName);
+
   return (
     <header className="flex flex-col sm:flex-row sm:justify-between sm:items-center shadow-md mb-1 p-4 sm:p-6 bg-white sticky top-0 z-10 gap-3">
       {/* 🔹 Left Section */}
@@ -33,7 +37,7 @@ const Header = () => {
         <div className="flex items-center space-x-2 cursor-pointer">
           <UserCircle className="w-7 h-7 sm:w-8 sm:h-8 text-gray-500" />
           <div className="hidden sm:block">
-            <p className="text-sm font-medium">John Restaurant</p>
+            <p className="text-sm font-medium">{userName}</p>
             <p className="text-xs text-gray-500">Owner</p>
           </div>
         </div>

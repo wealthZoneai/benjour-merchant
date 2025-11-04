@@ -22,7 +22,6 @@ const DashboardLayout: React.FC = () => {
           <Route path="profile" element={<ProfilePage />} />
           <Route path="help" element={<HelpAndSupport />} />
           <Route path="settings" element={<Settings />} />
-         
         </Routes>
       </div>
     </div>

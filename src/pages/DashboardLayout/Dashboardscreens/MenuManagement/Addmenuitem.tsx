@@ -26,7 +26,6 @@ const AddMenuItemModal: React.FC<AddMenuItemModalProps> = ({ isOpen, onClose, on
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const merchantId = useSelector((state: RootState) => state.user.merchantId);
   const [categories, setCategories] = useState<{ menuId: number; menuName: string }[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>();
 
@@ -34,13 +33,13 @@ const AddMenuItemModal: React.FC<AddMenuItemModalProps> = ({ isOpen, onClose, on
     if (editData) {
       setItemName(editData.itemName || '');
       setItemDescription(editData.itemDescription || '');
-      setPrice(editData.price?.toString() || '');
-      setAvailable(editData.available ?? true);
+      setPrice(editData.itemPrice?.toString() || '');
+      setAvailable(editData.itemAvailable ?? true);
       setItemType(editData.itemType || '');
       setPreparationTime(editData.preparationTime?.toString() || '');
       setDiscount(editData.discount?.toString() || '');
       setIngredients(editData.ingredients || '');
-      setImagePreview(editData.image || PLACEHOLDER_IMAGE);
+      setImagePreview(editData.itemImageUrl || PLACEHOLDER_IMAGE);
     } else {
       setItemName('');
       setItemDescription('');
@@ -101,17 +100,14 @@ const AddMenuItemModal: React.FC<AddMenuItemModalProps> = ({ isOpen, onClose, on
 
       if (editData) {
         const updateBody = {
-          Id: selectedCategory,
-          itemId: editData.itemId,
+          Id: editData?.itemId,
+          menuId: editData?.menuId,
           itemName,
           itemDescription,
           price: parseFloat(price),
           available,
-          itemType,
-          preparationTime: parseInt(preparationTime),
-          discount: parseFloat(discount),
           ingredients,
-          imageFile: imageFile || editData.image,
+          imageUrl: imageFile || editData.itemImageUrl,
         };
         const response = await UpdateCategoryItem(updateBody);
         toast.success("Item updated successfully!");
@@ -134,7 +130,7 @@ const AddMenuItemModal: React.FC<AddMenuItemModalProps> = ({ isOpen, onClose, on
       }
 
       onClose();
-      onSave(true)
+      onSave((prev:boolean) => !prev)
     } catch (error) {
       console.log(error)
       toast.error("Failed to save menu item. Please try again.");
